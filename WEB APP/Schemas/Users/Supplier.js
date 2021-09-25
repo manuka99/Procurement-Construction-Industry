@@ -14,11 +14,6 @@ const SupplierSchema = new Schema({
     maxlength: [650, "description must not have more than 650 characters."],
   },
   payments: [{ type: Types.ObjectId, ref: "payment" }],
-  file: {
-    type: Types.ObjectId,
-    required: false,
-    ref: "upload",
-  },
   isApproved: {
     type: Boolean,
     default: false,

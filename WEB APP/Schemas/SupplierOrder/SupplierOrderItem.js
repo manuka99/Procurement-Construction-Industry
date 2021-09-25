@@ -4,12 +4,12 @@ const SupplierOrderItemSchema = new Schema(
   {
     supplierOrderID: {
       type: Types.ObjectId,
-      ref: "site_order",
+      ref: "supplier_order",
       required: true,
     },
     product: {
       type: Types.ObjectId,
-      ref: "supplier_product",
+      ref: "product",
       required: true,
     },
     quantity: {

@@ -20,6 +20,7 @@ exports.TokenValidator = async (req, res, next) => {
 
     // user is authenicated, used by other middlewares to verify role etc
     req.user = user;
+    req.body.user = user._id;
     req.user_jwt = token;
   } catch (error) {
     consola.error(`TokenValidator Middleware: ${error.message}`);

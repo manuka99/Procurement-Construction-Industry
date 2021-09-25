@@ -2,16 +2,26 @@ const { Schema, model, Types } = require("mongoose");
 
 const ProductSchema = new Schema(
   {
-    name: {
-      type: String,
+    supplier: {
+      type: Types.ObjectId,
+      ref: "supplier",
       required: true,
     },
-    metric: {
-      type: String,
+    productType: {
+      type: Types.ObjectId,
+      ref: "product_type",
       required: true,
     },
-    description: String,
-    image: String,
+    quantity: {
+      type: Number,
+      required: true,
+    },
+    isAvailable: {
+      type: Boolean,
+      default: true,
+    },
+    threshold: Number,
+    brand: String,
   },
   { timestamps: true }
 );

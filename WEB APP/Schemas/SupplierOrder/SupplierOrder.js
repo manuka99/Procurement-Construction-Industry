@@ -7,11 +7,13 @@ const SupplierOrderSchema = new Schema(
       ref: "site_order",
       required: true,
     },
-    siteOrderItemID: {
-      type: Types.ObjectId,
-      ref: "site_order_item",
-      required: true,
-    },
+    siteOrderItemID: [
+      {
+        type: Types.ObjectId,
+        ref: "site_order_item",
+        required: true,
+      },
+    ],
     user: {
       type: Types.ObjectId,
       ref: "user",
@@ -20,6 +22,11 @@ const SupplierOrderSchema = new Schema(
     site: {
       type: Types.ObjectId,
       ref: "site",
+      required: true,
+    },
+    supplier: {
+      type: Types.ObjectId,
+      ref: "supplier",
       required: true,
     },
     status: {

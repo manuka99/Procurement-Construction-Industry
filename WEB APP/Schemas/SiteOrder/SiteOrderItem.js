@@ -7,9 +7,9 @@ const OrderItemSchema = new Schema(
       ref: "site_order",
       required: true,
     },
-    product: {
+    productType: {
       type: Types.ObjectId,
-      ref: "product",
+      ref: "product_type",
       required: true,
     },
     quantity: {
