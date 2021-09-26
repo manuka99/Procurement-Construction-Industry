@@ -1,7 +1,8 @@
-const { sendSuccess } = require("../Common/util");
+const { sendSuccess, sendError } = require("../Common/util");
 const { UserEnum } = require("../Models/UserModel");
 const ValidationError = require("../Common/ValidationError");
 const SupplierEndpoint = require("../Endpoints/SupplierEndpoint");
+const UserDao = require("../Dao/UserDao");
 
 //to validate token
 exports.GetRequestUser = (req, res, next) => {
@@ -29,4 +30,34 @@ exports.Registration = (req, res, next) => {
     default:
       throw new ValidationError("Invalid Role assigned!");
   }
+};
+
+exports.Login = async (req, res, next) => {
+  const { email, password } = req.body;
+
+  // match email
+  UserDao.findUserByEmailWithPassword(email)
+    .then((user) => {
+      if (!user)
+        return sendError(res, {
+          message: "No account associated with the email provided.",
+        });
+
+      // match password
+      const isMatch = user.matchPasswords(password);
+      if (!isMatch)
+        return sendError(res, {
+          message: "Password is incorrect",
+        });
+
+      // return jwt token
+      user.password = null;
+
+      return sendSuccess(res, {
+        user,
+        message: "Success user login",
+        token: user.getSignedJwtToken(),
+      });
+    })
+    .catch(next);
 };

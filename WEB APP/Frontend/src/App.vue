@@ -1,3 +1,8 @@
 <template>
-  <router-view :key="$route.fullPath" />
+  <router-view></router-view>
 </template>
+
+<script>
+export default {
+}
+</script>

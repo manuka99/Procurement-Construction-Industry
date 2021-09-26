@@ -4,7 +4,7 @@ const { Schema, Types } = require("mongoose");
 
 const SupplierSchema = new Schema({
   logo: {
-    type: Date,
+    type: String,
     required: [false, "Logo must not be empty."],
   },
   description: {

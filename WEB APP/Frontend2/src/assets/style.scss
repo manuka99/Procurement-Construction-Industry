@@ -1,4 +1,5 @@
-$font-family-sans-serif: "Open Sans", sans-serif;
+$font-family-sans-serif: "Open Sans",
+sans-serif;
 
 // Colors
 $white: #ffffff;
@@ -59,8 +60,7 @@ $yellow-muted: #ffc10750;
 $green-muted: #28a74550;
 
 // custom theme colors
-$colors: (
-  primary-muted-50: $primary-red-50,
+$colors: (primary-muted-50: $primary-red-50,
   primary-muted-70: $primary-red-70,
   secondary-muted: $dark-10,
   success-muted: $green-muted,
@@ -78,8 +78,7 @@ $colors: (
 );
 
 // bootstrap theme colors
-$theme-colors: (
-  primary: $primary-red,
+$theme-colors: (primary: $primary-red,
   secondary: $secondary-blue,
   success: $green,
   info: $secondary-blue,
@@ -136,257 +135,339 @@ $b-table-sort-icon-bg-dark-descending: url("data:image/svg+xml,<svg version='1.1
 .font-primary {
   font-family: "DINPro", sans-serif;
 }
+
 .font-secondary {
   font-family: "Open Sans", sans-serif;
 }
+
 /* global custom text properties */
 .text-v-small {
   font-size: 0.6rem;
   font-weight: 200;
 }
+
 .text-small {
   font-size: 0.8rem;
   font-weight: 200;
 }
+
 .text-medium {
   font-size: 0.95rem;
   font-weight: 300;
 }
+
 .font-weight-medium {
   font-weight: 500;
 }
+
 /* custom bootstrap bg colors */
 .bg-accent {
   background-color: var(--accent) !important;
 }
+
 .bg-prime-gray {
   background-color: var(--prime-gray) !important;
 }
+
 .bg-ghost-white {
   background-color: var(--ghost-white) !important;
 }
+
 .bg-primary-muted {
   background-color: var(--primary-muted-50) !important;
 }
+
 .bg-secondary-muted {
   background-color: var(--secondary-muted) !important;
 }
+
 .bg-success-muted {
   background-color: var(--success-muted) !important;
 }
+
 .bg-info-muted {
   background-color: var(--info-muted) !important;
 }
+
 .bg-warning-muted {
   background-color: var(--warning-muted) !important;
 }
+
 .bg-danger-muted {
   background-color: var(--danger-muted) !important;
 }
+
 .bg-gray-100 {
   background-color: var(--gray-100) !important;
 }
+
 .bg-gray-200 {
   background-color: var(--gray-200) !important;
 }
+
 .bg-gray-300 {
   background-color: var(--gray-300) !important;
 }
+
 .bg-gray-400 {
   background-color: var(--gray-400) !important;
 }
+
 .bg-gray-500 {
   background-color: var(--gray-500) !important;
 }
+
 .bg-gray-600 {
   background-color: var(--gray-600) !important;
 }
+
 .bg-gray-700 {
   background-color: var(--gray-700) !important;
 }
+
 .bg-gray-800 {
   background-color: var(--gray-800) !important;
 }
+
 .bg-gray-900 {
   background-color: var(--gray-900) !important;
 }
+
 /* custom bootstrap border colors */
 .border-accent {
   border-color: var(--accent) !important;
 }
+
 .border-stroke-light {
   border-color: var(--stroke-light) !important;
 }
+
 .border-prime-gray {
   border-color: var(--prime-gray) !important;
 }
+
 .border-ghost-white {
   border-color: var(--ghost-white) !important;
 }
+
 .border-primary-muted {
   border-color: var(--primary-muted-50) !important;
 }
+
 .border-secondary-muted {
   border-color: var(--secondary-muted) !important;
 }
+
 .border-success-muted {
   border-color: var(--success-muted) !important;
 }
+
 .border-info-muted {
   border-color: var(--info-muted) !important;
 }
+
 .border-warning-muted {
   border-color: var(--warning-muted) !important;
 }
+
 .border-danger-muted {
   border-color: var(--danger-muted) !important;
 }
+
 .border-gray-100 {
   border-color: var(--gray-100) !important;
 }
+
 .border-gray-200 {
   border-color: var(--gray-200) !important;
 }
+
 .border-gray-300 {
   border-color: var(--gray-300) !important;
 }
+
 .border-gray-400 {
   border-color: var(--gray-400) !important;
 }
+
 .border-gray-500 {
   border-color: var(--gray-500) !important;
 }
+
 .border-gray-600 {
   border-color: var(--gray-600) !important;
 }
+
 .border-gray-700 {
   border-color: var(--gray-700) !important;
 }
+
 .border-gray-800 {
   border-color: var(--gray-800) !important;
 }
+
 .border-gray-900 {
   border-color: var(--gray-900) !important;
 }
+
 /* custom bootstrap text colors */
 .text-accent {
   color: var(--accent) !important;
 }
+
 .text-prime-gray {
   color: var(--prime-gray) !important;
 }
+
 .text-ghost-white {
   color: var(--ghost-white) !important;
 }
+
 .text-primary-muted {
   color: var(--primary-muted-50) !important;
 }
+
 .text-secondary-muted {
   color: var(--secondary-muted) !important;
 }
+
 .text-success-muted {
   color: var(--success-muted) !important;
 }
+
 .text-info-muted {
   color: var(--info-muted) !important;
 }
+
 .text-warning-muted {
   color: var(--warning-muted) !important;
 }
+
 .text-danger-muted {
   color: var(--danger-muted) !important;
 }
+
 .text-dark {
   color: var(--dark) !important;
 }
+
 .text-gray-100 {
   color: var(--gray-100) !important;
 }
+
 .text-gray-200 {
   color: var(--gray-200) !important;
 }
+
 .text-gray-300 {
   color: var(--gray-300) !important;
 }
+
 .text-gray-400 {
   color: var(--gray-400) !important;
 }
+
 .text-gray-500 {
   color: var(--gray-500) !important;
 }
+
 .text-gray-600 {
   color: var(--gray-600) !important;
 }
+
 .text-gray-700 {
   color: var(--gray-700) !important;
 }
+
 .text-gray-800 {
   color: var(--gray-800) !important;
 }
+
 .text-gray-900 {
   color: var(--gray-900) !important;
 }
+
 /* custom bootstrap button colors */
 .btn-accent {
   background-color: var(--accent) !important;
 }
+
 .btn-prime-gray {
   background-color: var(--prime-gray) !important;
 }
+
 .btn-ghost-white {
   background-color: var(--ghost-white) !important;
 }
+
 .btn-primary-muted {
   background-color: var(--primary-muted-50) !important;
 }
+
 .btn-secondary-muted {
   background-color: var(--secondary-muted) !important;
 }
+
 .btn-success-muted {
   background-color: var(--success-muted) !important;
 }
+
 .btn-info-muted {
   background-color: var(--info-muted) !important;
 }
+
 .btn-warning-muted {
   background-color: var(--warning-muted) !important;
 }
+
 .btn-danger-muted {
   background-color: var(--danger-muted) !important;
 }
+
 .btn-gray-100 {
   background-color: var(--gray-100) !important;
 }
+
 .btn-gray-200 {
   background-color: var(--gray-200) !important;
 }
+
 .btn-gray-300 {
   background-color: var(--gray-300) !important;
 }
+
 .btn-gray-400 {
   background-color: var(--gray-400) !important;
 }
+
 .btn-gray-500 {
   background-color: var(--gray-500) !important;
 }
+
 .btn-gray-600 {
   background-color: var(--gray-600) !important;
 }
+
 .btn-gray-700 {
   background-color: var(--gray-700) !important;
 }
+
 .btn-gray-800 {
   background-color: var(--gray-800) !important;
 }
+
 .btn-gray-900 {
   background-color: var(--gray-900) !important;
 }
+
 .shadow-soft {
   box-shadow: 0px 2px 8px var(--shadow-soft);
 }
+
 .shadow-hard {
   box-shadow: 0px 8px 16px var(--shadow-hard);
 }
+
 // Chromium/Webkit autocomoplete color fix
 /* Change the white to any color */
 input:-webkit-autofill,

@@ -3,16 +3,17 @@
     v-model="notify.isToast"
     :variant="notify.variant"
     solid
-    toaster="b-toaster-bottom-right"
-    header-class="text-uppercase py-0"
+    toaster="b-toaster-bottom-right text-white p-2"
+    header-class="text-uppercase p-2 text-white"
+    body-class="p-2 text-white"
   >
     <template v-slot:toast-title>
-      <strong class="mr-auto">{{ notify.title }}</strong>
+      <strong class="mr-auto ctext-small">{{ notify.title }}</strong>
     </template>
-    <span class="text-left text-small">{{ notify.content }}</span>
+    <span class="text-left text-small ctext-small">{{ notify.content }}</span>
     <ul class="mt-1 mb-0 pl-3" v-if="notify.list && notify.list.length > 0">
       <li v-for="(item, index) in notify.list" :key="index">
-        <span class="text-left text-small">{{ item }}</span>
+        <span class="text-left text-small ctext-small  p-2">{{ item }}</span>
       </li>
     </ul>
   </b-toast>
@@ -24,13 +25,13 @@ export default {
   name: "ToastNotification",
   data() {
     return {
-      isToast: true,
+      isToast: true
     };
   },
   computed: {
     ...mapGetters({
-      notify: "notification/getNotify",
-    }),
+      notify: "notification/getNotify"
+    })
   },
   watch: {
     notify(val) {
@@ -40,17 +41,20 @@ export default {
             isToast: false,
             title: null,
             content: null,
-            list: null,
+            list: null
             // variant: "success",
           };
           this.$store.dispatch("notification/setNotify", payloadNotify);
         },
         val.duration == "short" ? 3000 : 6000
       );
-    },
-  },
+    }
+  }
 };
 </script>
 
-<style scoped>
+<style>
+.ctext-small {
+  font-size: 14px;
+}
 </style>
