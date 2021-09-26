@@ -18,10 +18,12 @@ const routes = [
           import(/* webpackChunkName: "demo" */ "../views/Dashboard.vue")
       },
       {
-        path: "/icons",
-        name: "Icons",
+        path: "/types",
+        name: "Types",
         component: () =>
-          import(/* webpackChunkName: "demo" */ "../views/Icons.vue")
+          import(
+            /* webpackChunkName: "demo" */ "../views/ProductType/ProductTypes.vue"
+          )
       },
       {
         path: "/profile",
@@ -39,7 +41,7 @@ const routes = [
       },
       {
         path: "/tables",
-        name: "tables",
+        name: "Tables",
         component: () =>
           import(/* webpackChunkName: "demo" */ "../views/RegularTables.vue")
       },

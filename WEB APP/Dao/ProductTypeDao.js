@@ -33,6 +33,18 @@ exports.findAllWithSupplierCount = async () => {
   return products;
 };
 
+exports.findAllWithSupplier = async () => {
+  const products = await ProductType.find();
+  var newProducts = [];
+  for (let index = 0; index < products.length; index++) {
+    var product = products[index];
+    const suppliers =
+      (await SupplierProduct.find({ product: product._id })) || [];
+    newProducts.push({ ...product._doc, suppliers });
+  }
+  return newProducts;
+};
+
 exports.delete = async (_id) => {
   var supplierProductCount = await SupplierProduct.count({ product: _id });
   if (supplierProductCount && supplierProductCount > 0)

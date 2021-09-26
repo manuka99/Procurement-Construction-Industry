@@ -10,8 +10,8 @@ exports.HandleError = (err, req, res, next) => {
   else if (err instanceof ValidationError)
     sendError(res, FormatValidationError(err), 422);
   else if (err instanceof AccessForbiddenError)
-    sendError(res, { msg: err.message, err }, 403);
+    sendError(res, { message: err.message, err }, 403);
   else if (err instanceof ApplicationError)
-    sendError(res, { msg: err.message, err }, 400);
-  else sendError(res, { msg: err.message, err }, 500);
+    sendError(res, { message: err.message, err }, 400);
+  else sendError(res, { message: err.message, err }, 500);
 };
