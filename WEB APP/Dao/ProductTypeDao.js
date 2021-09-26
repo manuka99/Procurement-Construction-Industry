@@ -1,5 +1,5 @@
 const ProductType = require("../Schemas/ProductType");
-const SupplierProduct = require("../Schemas/Product");
+const Product = require("../Schemas/Product");
 
 exports.create = async (data) => {
   const product = await ProductType.create(data);
@@ -13,7 +13,7 @@ exports.findByID = async (id) => {
 
 exports.findByIDWithProducts = async (id) => {
   const productType = await ProductType.findById(id);
-  const products = await SupplierProduct.find({
+  const products = await Product.find({
     productType: productType._id,
   }).populate("supplier");
   return { ...productType._doc, products };
@@ -28,7 +28,7 @@ exports.findAllWithSupplierCount = async () => {
   const products = await ProductType.find();
   for (let index = 0; index < products.length; index++) {
     const product = products[index];
-    product.suppliers = await SupplierProduct.count({ product: product._id });
+    product.suppliers = await Product.count({ productType: product._id });
   }
   return products;
 };
@@ -39,15 +39,16 @@ exports.findAllWithSupplier = async () => {
   for (let index = 0; index < products.length; index++) {
     var product = products[index];
     const suppliers =
-      (await SupplierProduct.find({ product: product._id })) || [];
+      (await Product.find({ productType: product._id }).populate("supplier")) ||
+      [];
     newProducts.push({ ...product._doc, suppliers });
   }
   return newProducts;
 };
 
 exports.delete = async (_id) => {
-  var supplierProductCount = await SupplierProduct.count({ product: _id });
-  if (supplierProductCount && supplierProductCount > 0)
+  var ProductCount = await Product.count({ productType: _id });
+  if (ProductCount && ProductCount > 0)
     throw new Error("Cannot delete a product which is used by suppliers");
   const product = await ProductType.deleteOne({ _id });
   return product;

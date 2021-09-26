@@ -19,10 +19,10 @@ exports.findByID = async (id) => {
 
 exports.findByIDWithProducts = async (id) => {
   const supplier = await Supplier.findById(id);
-  supplier.products = await Product.find({
+  const productTypes = await Product.find({
     supplier: supplier._id,
-  }).populate("product");
-  return supplier;
+  }).populate("productType");
+  return { ...supplier._doc, productTypes };
 };
 
 exports.findAll = async () => {
@@ -30,15 +30,17 @@ exports.findAll = async () => {
   return suppliers;
 };
 
-exports.findAllWithProductCount = async () => {
+exports.findAllWithProducts = async () => {
   const suppliers = await Supplier.find();
+  var newSuppliers = [];
   for (let index = 0; index < suppliers.length; index++) {
     const supplier = suppliers[index];
-    supplier.products = await Product.count({
+    const productTypes = await Product.find({
       supplier: supplier._id,
-    });
+    }).populate("productType");
+    newSuppliers.push({ ...supplier._doc, productTypes });
   }
-  return suppliers;
+  return newSuppliers;
 };
 
 exports.delete = async (_id) => {

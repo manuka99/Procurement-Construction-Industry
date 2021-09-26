@@ -34,6 +34,22 @@ const routes = [
           )
       },
       {
+        path: "/suppliers",
+        name: "Suppliers",
+        component: () =>
+          import(
+            /* webpackChunkName: "demo" */ "../views/Supplier/Suppliers.vue"
+          )
+      },
+      {
+        path: "/suppliers/:id",
+        name: "Supplier",
+        component: () =>
+          import(
+            /* webpackChunkName: "demo" */ "../views/Supplier/Supplier.vue"
+          )
+      },
+      {
         path: "/profile",
         name: "Profile",
         component: () =>

@@ -3,9 +3,12 @@ import Api from "./api";
 export const GetALLSuppliers = () => {
   return Api().get(`/auth/suppliers`);
 };
+export const GetALLSuppliersWithProducts = () => {
+  return Api().get(`/auth/suppliers/products`);
+};
 
-export const GetType = id => {
-  return Api().get(`/auth/types/${id}`);
+export const GetSupplier = id => {
+  return Api().get(`/auth/suppliers/${id}`);
 };
 
 export const CreateType = payload => {

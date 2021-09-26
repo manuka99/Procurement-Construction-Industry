@@ -12,10 +12,19 @@ exports.GetAll = async (req, res, next) => {
   }
 };
 
-exports.GetAllWithProductsCount = async (req, res, next) => {
+exports.GetAllWithProducts = async (req, res, next) => {
   try {
-    var suppliers = await SupplierDao.findAllWithProductCount();
+    var suppliers = await SupplierDao.findAllWithProducts();
     sendSuccess(res, { suppliers });
+  } catch (error) {
+    next(error);
+  }
+};
+
+exports.GetSupplierWithProducts = async (req, res, next) => {
+  try {
+    var supplier = await SupplierDao.findByIDWithProducts(req.params.id);
+    sendSuccess(res, { supplier });
   } catch (error) {
     next(error);
   }

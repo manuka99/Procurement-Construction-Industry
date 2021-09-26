@@ -56,20 +56,20 @@
           }"
         >
         </sidebar-item>
-
         <sidebar-item
           :link="{
-            name: 'Login',
-            path: '/login',
-            icon: 'ni ni-key-25 text-info'
+            name: 'Suppliers',
+            path: '/suppliers',
+            icon: 'ni ni-circle-08 text-pink'
           }"
         >
         </sidebar-item>
+
         <sidebar-item
           :link="{
-            name: 'Register',
-            path: '/register',
-            icon: 'ni ni-circle-08 text-pink'
+            name: 'Suppliers',
+            path: '/suppliers',
+            icon: 'ni ni-key-25 text-yellow'
           }"
         >
         </sidebar-item>

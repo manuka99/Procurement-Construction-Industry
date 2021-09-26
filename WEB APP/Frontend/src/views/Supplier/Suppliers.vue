@@ -65,10 +65,10 @@
       <template>
         <b-card no-body class="bg-default shadow">
           <b-card-header class="d-flex flex-column bg-transparent border-0">
-            <h3 class="mb-3 text-white">Product Types</h3>
+            <h3 class="mb-3 text-white">All Raw Material Suppliers</h3>
             <div>
               <button class="btn btn-success btn-sm" @click="isShow = true">
-                New Product Type
+                New Supplier
               </button>
             </div>
           </b-card-header>
@@ -77,7 +77,7 @@
             :items="items"
             :fields="fields"
             sort-icon-left
-            responsive="lg"
+            responsive
             hover
             dark
             class="custom-table"
@@ -87,9 +87,8 @@
             <template #empty>
               <div class="d-flex text-center justify-content-center">
                 <span>
-                  There are no product types to show, start adding new product
-                  types</span
-                >
+                  There are no suppliers to show, start adding new suppliers
+                </span>
               </div>
             </template>
 
@@ -103,53 +102,71 @@
               ></b-icon>
             </template>
 
-            <template #cell(image)="data">
-              <div>
-                <b-avatar
-                  :text="data.item.name.charAt(0) + data.item.name.charAt(1)"
-                  :src="data.value"
-                  :class="data.item.avatarClass"
-                >
-                </b-avatar>
+            <template #cell(logo)="data">
+              <b-avatar
+                :text="
+                  data.item.firstName.charAt(0) + data.item.lastName.charAt(0)
+                "
+                :src="data.value"
+                :class="data.item.avatarClass"
+              >
+              </b-avatar>
+            </template>
+
+            <template #cell(name)="data">
+              <div style="text-align: start">
+                <b-icon
+                  v-if="data.item.isApproved == true"
+                  icon="check-circle-fill"
+                  scale="1.6"
+                  class="mr-3"
+                  variant="success"
+                ></b-icon>
+                <b-icon
+                  v-if="data.item.isApproved == false"
+                  icon="x-circle-fill"
+                  scale="1.2"
+                  class="mr-3"
+                  variant="danger"
+                ></b-icon>
+                {{ data.item.firstName + " " + data.item.lastName }}
               </div>
             </template>
 
-            <template #cell(suppliers)="data">
-              <div>
-                <div v-if="data.value.length > 0">
-                  <b-avatar-group size="2rem">
-                    <b-avatar
-                      v-for="i in data.value.slice(
-                        0,
-                        data.value.length > 4 ? 3 : 4
-                      )"
-                      :key="i"
-                      :text="
-                        i.supplier.firstName.charAt(0) +
-                          i.supplier.lastName.charAt(0)
-                      "
-                      :src="i.logo"
-                      :class="getAvatarClass()"
-                    >
-                    </b-avatar>
-                    <b-avatar
-                      v-if="data.value.length > 4"
-                      :text="'+' + (data.value.length - 4).toString()"
-                      class="bg-white text-dark"
-                    >
-                    </b-avatar>
-                  </b-avatar-group>
-                </div>
-                <div v-else>
-                  <b-badge variant="success text-white">No Suppliers</b-badge>
-                </div>
+            <template #cell(productTypes)="data">
+              <div v-if="data.value.length > 0" class="avatar-group">
+                <b-avatar-group size="2rem">
+                  <b-avatar
+                    v-for="i in data.value.slice(
+                      0,
+                      data.value.length > 4 ? 3 : 4
+                    )"
+                    :key="i"
+                    :text="
+                      i.productType.name.charAt(0) +
+                        i.productType.name.charAt(1)
+                    "
+                    :src="i.image"
+                    :class="getAvatarClass()"
+                  >
+                  </b-avatar>
+                  <b-avatar
+                    v-if="data.value.length > 4"
+                    :text="'+' + (data.value.length - 4).toString()"
+                    class="bg-white text-dark"
+                  >
+                  </b-avatar>
+                </b-avatar-group>
+              </div>
+              <div v-else>
+                <b-badge variant="success text-white">No Products</b-badge>
               </div>
             </template>
           </b-table>
         </b-card>
       </template>
     </b-container>
-    <CreateProductType
+    <CreateSupplier
       :isShow="isShow"
       @onClose="onClose"
       :key="createProductKey"
@@ -158,25 +175,28 @@
 </template>
 
 <script>
-import { GetALL, DeleteType } from "@/services/types.service";
-import CreateProductType from "./CreateProductType";
+import { GetALLSuppliersWithProducts } from "@/services/supplier.service";
+import CreateSupplier from "./CreateSupplier";
 export default {
-  name: "ProductTypes",
-  components: { CreateProductType },
+  name: "Suppliers",
+  components: {
+    CreateSupplier
+  },
   data() {
     return {
       fields: [
-        { key: "image", label: "Image" },
-        { key: "name", label: "Product Name" },
-        { key: "createdAt", label: "Created Date" },
-        { key: "metric", label: "Measured Metrics" },
-        { key: "description", label: "Description" },
-        { key: "suppliers", label: "Suppliers" },
+        { key: "logo", label: "Logo" },
+        { key: "name", label: "Company Name" },
+        { key: "createdAt", label: "Joined Date" },
+        { key: "address", label: "Location" },
+        { key: "phone", label: "Contact" },
+        { key: "email", label: "Email" },
+        { key: "productTypes", label: "Product Types" },
         { key: "delete", label: "Delete" }
       ],
       items: [],
       isShow: false,
-      createProductKey: new Date().valueOf()
+      createProductKey: new Date().valueOf().toString() + 1000
     };
   },
   mounted() {
@@ -184,9 +204,11 @@ export default {
   },
   methods: {
     initFn() {
-      GetALL()
+      GetALLSuppliersWithProducts()
         .then(res => {
-          this.items = res.data.data.productTypes.map(object => {
+          console.log(res.data.data);
+          this.items = res.data.data.suppliers.map(object => {
+            object.avatarClass = this.getAvatarClass();
             object.createdAt = object.createdAt.split("T")[0];
             return object;
           });
@@ -226,7 +248,7 @@ export default {
       }
     },
     onRowClicked(data) {
-      this.$router.push({ name: "Type", params: { id: data._id } });
+      this.$router.push({ name: "Supplier", params: { id: data._id } });
     }
   }
 };
