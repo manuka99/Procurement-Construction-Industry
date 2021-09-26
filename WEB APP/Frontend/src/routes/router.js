@@ -59,7 +59,8 @@ router.beforeEach((to, from, next) => {
         "Suppliers",
         "MySites",
         "Tables",
-        "Types"
+        "Types",
+        "Type"
       ];
       break;
     default:

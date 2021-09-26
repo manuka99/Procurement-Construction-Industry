@@ -3,6 +3,15 @@ const SupplierDao = require("../Dao/SupplierDao");
 const lodash = require("lodash");
 
 // to remove payment
+exports.GetAll = async (req, res, next) => {
+  try {
+    var suppliers = await SupplierDao.findAll();
+    sendSuccess(res, { suppliers });
+  } catch (error) {
+    next(error);
+  }
+};
+
 exports.GetAllWithProductsCount = async (req, res, next) => {
   try {
     var suppliers = await SupplierDao.findAllWithProductCount();

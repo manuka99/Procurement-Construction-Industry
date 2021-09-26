@@ -61,14 +61,37 @@
         </b-col>
       </b-row>
     </base-header>
+
     <b-container fluid class="mt--7">
+      <b-row v-if="productType != null">
+        <div class="mt-4"></div>
+      </b-row>
       <template>
         <b-card no-body class="bg-default shadow">
           <b-card-header class="d-flex flex-column bg-transparent border-0">
-            <h3 class="mb-3 text-white">Product Types</h3>
+            <b-card
+              :img-src="productType.image"
+              img-alt="Card image"
+              img-left
+              class="mb-3"
+            >
+              <b-card-text>
+                <h4>{{ productType.name }}</h4>
+              </b-card-text>
+              <b-card-text>
+                Measurement Unit: {{ productType.metric }}
+              </b-card-text>
+              <b-card-text>
+                Created Date: {{ productType.createdAt }}
+              </b-card-text>
+              <b-card-text>
+                {{ productType.description }}
+              </b-card-text>
+            </b-card>
+            <h3 class="mb-3 text-white">Products Available</h3>
             <div>
               <button class="btn btn-success btn-sm" @click="isShow = true">
-                New Product Type
+                New Product
               </button>
             </div>
           </b-card-header>
@@ -81,15 +104,13 @@
             hover
             dark
             class="custom-table"
-            @row-clicked="onRowClicked"
             show-empty
           >
             <template #empty>
               <div class="d-flex text-center justify-content-center">
                 <span>
-                  There are no product types to show, start adding new product
-                  types</span
-                >
+                  There are no product to show, start adding new products
+                </span>
               </div>
             </template>
 
@@ -103,63 +124,87 @@
               ></b-icon>
             </template>
 
-            <template #cell(suppliers)="data">
-              <div v-if="data.value.length > 0" class="avatar-group">
-                <b-avatar-group size="2rem">
-                  <b-avatar
-                    v-for="i in data.value.slice(
-                      0,
-                      data.value.length > 4 ? 3 : 4
-                    )"
-                    :key="i"
-                    :text="i.firstName.charAt(0) + i.lastName.charAt(0)"
-                    :src="i.logo"
-                    :class="getAvatarClass()"
-                  >
-                  </b-avatar>
-                  <b-avatar
-                    v-if="data.value.length > 4"
-                    :text="'+' + (data.value.length - 4).toString()"
-                    class="bg-white text-dark"
-                  >
-                  </b-avatar>
-                </b-avatar-group>
-              </div>
-              <div v-else>
-                <b-badge variant="success text-white">No Suppliers</b-badge>
-              </div>
+            <template #cell(isAvailable)="data">
+              <b-icon
+                :variant="data.value == true ? 'success' : 'danger'"
+                icon="circle-fill"
+                animation="throb"
+                font-scale="1.4"
+              ></b-icon>
+            </template>
+
+            <template #cell(_id)="data">
+              <router-link :to="'/products/' + data.value">
+                <div
+                  class="d-flex justify-content-center align-items-center"
+                  style="cursor: pointer"
+                >
+                  <b-badge :class="data.item.idClass">{{ data.value }}</b-badge>
+                </div>
+              </router-link>
+            </template>
+            <template #cell(supplier)="data">
+              <router-link :to="'/suppliers/' + data.value._id">
+                <div
+                  class="d-flex justify-content-center align-items-center"
+                  style="cursor: pointer"
+                >
+                  <b-avatar-group size="2rem" class="mr-2">
+                    <b-avatar
+                      :text="
+                        data.value.firstName.charAt(0) +
+                          data.value.lastName.charAt(0)
+                      "
+                      :src="data.value.logo"
+                      :class="data.value.avatarClass"
+                    >
+                    </b-avatar>
+                    <div
+                      class="d-flex justify-content-center align-items-center ml-3"
+                    >
+                      <b-badge :class="data.value.avatarClass">{{
+                        data.value.firstName + " " + data.value.lastName
+                      }}</b-badge>
+                    </div>
+                  </b-avatar-group>
+                </div>
+              </router-link>
             </template>
           </b-table>
         </b-card>
       </template>
     </b-container>
-    <CreateProductType
+    <CreateProduct
       :isShow="isShow"
       @onClose="onClose"
+      :selectedProduct="productType._id"
       :key="createProductKey"
     />
   </div>
 </template>
 
 <script>
-import { GetALL, DeleteType } from "@/services/types.service";
-import CreateProductType from "./CreateProductType";
+import { GetType, DeleteType } from "@/services/types.service";
+import CreateProduct from "@/views/Product/CreateProduct";
+
 export default {
-  name: "ProductTypes",
-  components: { CreateProductType },
+  name: "ProductType",
+  components: { CreateProduct },
   data() {
     return {
       fields: [
-        { key: "image", label: "Image" },
-        { key: "name", label: "Product Name" },
+        { key: "supplier", label: "Supplier" },
+        { key: "_id", label: "Product ID" },
+        { key: "quantity", label: "Product Quantity", sortable: true },
         { key: "createdAt", label: "Created Date" },
-        { key: "metric", label: "Measured Metrics" },
-        { key: "description", label: "Description" },
-        { key: "suppliers", label: "Suppliers" },
+        { key: "isAvailable", label: "Availability" },
+        { key: "threshold", label: "Threshold" },
+        { key: "brand", label: "Product Brand" },
         { key: "delete", label: "Delete" }
       ],
       items: [],
       isShow: false,
+      productType: {},
       createProductKey: new Date().valueOf()
     };
   },
@@ -168,24 +213,16 @@ export default {
   },
   methods: {
     initFn() {
-      GetALL()
+      GetType(this.$route.params.id)
         .then(res => {
-          this.items = res.data.data.productTypes.map(object => {
+          console.log(res.data.data);
+          this.productType = res.data.data.productType;
+          this.items = res.data.data.productType.products.map(object => {
+            object.idClass = this.getAvatarClass();
+            object.supplier.avatarClass = this.getAvatarClass();
             object.createdAt = object.createdAt.split("T")[0];
             return object;
           });
-        })
-        .catch(e => console.log(e));
-    },
-    deleteItem(id) {
-      DeleteType(id)
-        .then(res => {
-          const id = res.data.data.productType._id;
-          const idx = this.items.findIndex(val => val._id == id);
-          this.items = [
-            ...this.items.slice(0, idx),
-            ...this.items.slice(idx + 1)
-          ];
         })
         .catch(e => console.log(e));
     },
@@ -209,8 +246,17 @@ export default {
           break;
       }
     },
-    onRowClicked(data) {
-      this.$router.push({ name: "Type", params: { id: data._id } });
+    deleteItem(id) {
+      DeleteType(id)
+        .then(res => {
+          const id = res.data.data.productType._id;
+          const idx = this.items.findIndex(val => val._id == id);
+          this.items = [
+            ...this.items.slice(0, idx),
+            ...this.items.slice(idx + 1)
+          ];
+        })
+        .catch(e => console.log(e));
     }
   }
 };

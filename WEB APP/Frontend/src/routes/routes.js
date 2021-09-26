@@ -26,6 +26,14 @@ const routes = [
           )
       },
       {
+        path: "/types/:id",
+        name: "Type",
+        component: () =>
+          import(
+            /* webpackChunkName: "demo" */ "../views/ProductType/ProductType.vue"
+          )
+      },
+      {
         path: "/profile",
         name: "Profile",
         component: () =>

@@ -11,12 +11,12 @@ exports.findByID = async (id) => {
   return product;
 };
 
-exports.findByIDWithSuppliers = async (id) => {
-  const product = await ProductType.findById(id);
-  product.suppliers = await SupplierProduct.find({
-    product: product._id,
-  }).populate("product");
-  return product;
+exports.findByIDWithProducts = async (id) => {
+  const productType = await ProductType.findById(id);
+  const products = await SupplierProduct.find({
+    productType: productType._id,
+  }).populate("supplier");
+  return { ...productType._doc, products };
 };
 
 exports.findAll = async () => {

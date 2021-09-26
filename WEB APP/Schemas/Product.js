@@ -22,6 +22,7 @@ const ProductSchema = new Schema(
     },
     threshold: Number,
     brand: String,
+    description: String,
   },
   { timestamps: true }
 );

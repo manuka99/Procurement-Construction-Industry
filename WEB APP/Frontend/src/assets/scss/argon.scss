@@ -69,8 +69,13 @@
 
 .table>tbody>tr>td {
   padding: 24px;
+  vertical-align: middle;
+  text-align: center;
+  font-size: 14px;
 }
 
 .table>thead>tr>th {
   padding: 20px;
+  vertical-align: middle;
+  text-align: center;
 }

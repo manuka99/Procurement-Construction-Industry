@@ -1,7 +1,7 @@
 import Api from "./api";
 
-export const GetALL = () => {
-  return Api().get(`/auth/types`);
+export const GetALLSuppliers = () => {
+  return Api().get(`/auth/suppliers`);
 };
 
 export const GetType = id => {

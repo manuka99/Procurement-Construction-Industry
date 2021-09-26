@@ -15,9 +15,9 @@
     @hide="closeModal()"
   >
     <template v-slot:modal-title>
-      <h2>Create Product Type</h2>
+      <h2>Create Product</h2>
     </template>
-    <template v-slot:modal-footer="{ cancel }">
+    <template v-slot:modal-footer>
       <!-- Emulate built in modal footer ok and cancel button actions -->
       <div
         class="
@@ -29,7 +29,7 @@
           w-100
         "
       >
-        <button class="btn btn-danger" @click="cancel">
+        <button class="btn btn-danger" @click="closeModal">
           Cancel
         </button>
         <base-button
@@ -52,42 +52,69 @@
     </template>
 
     <b-form class="w-100">
+      <b-form-group id="input-group-3" label="Product Type" label-for="input-3">
+        <b-form-select
+          id="input-3"
+          v-model="model.productType"
+          :options="productTypes"
+          required
+        ></b-form-select>
+      </b-form-group>
+
+      <b-form-group id="input-group-3" label="Supplier" label-for="input-3">
+        <b-form-select
+          id="input-3"
+          v-model="model.supplier"
+          :options="suppliers"
+          required
+        ></b-form-select>
+      </b-form-group>
+
+      <b-form-group id="input-group-4">
+        <b-form-checkbox :value="true" v-model="model.isAvailable"
+          ><span class="text-primary"
+            >Product is available and visible for sales?</span
+          ></b-form-checkbox
+        >
+      </b-form-group>
+
+      <b-form-group
+        id="input-group-2"
+        label="Product Brand:"
+        label-for="input-2"
+      >
+        <b-form-input
+          id="input-2"
+          v-model="model.brand"
+          placeholder="Type product brand...."
+          required
+        ></b-form-input>
+      </b-form-group>
+
       <b-form-group
         id="input-group-1"
-        label="Product Type Image: "
+        label="Product Quantity: "
         label-for="input-1"
       >
         <b-form-input
           id="input-1"
-          v-model="model.image"
-          type="text"
-          placeholder="Paste Image URL...."
+          v-model="model.quantity"
+          type="number"
+          placeholder="Enter product quantity...."
           required
         ></b-form-input>
       </b-form-group>
 
       <b-form-group
         id="input-group-2"
-        label="Product Type Name:"
+        label="Product Threshold:"
         label-for="input-2"
       >
         <b-form-input
           id="input-2"
-          v-model="model.name"
-          placeholder="Type product type name...."
-          required
-        ></b-form-input>
-      </b-form-group>
-
-      <b-form-group
-        id="input-group-2"
-        label="Measurement Type:"
-        label-for="input-2"
-      >
-        <b-form-input
-          id="input-2"
-          v-model="model.metric"
-          placeholder="Type product type metrics...."
+          v-model="model.threshold"
+          type="number"
+          placeholder="Type product threshold...."
           required
         ></b-form-input>
       </b-form-group>
@@ -121,14 +148,18 @@
 
 <script>
 // services
-import { CreateType } from "@/services/types.service";
+import { GetALL } from "@/services/types.service";
+import { GetALLSuppliers } from "@/services/supplier.service";
+import { CreateProduct } from "@/services/product.service";
 
 export default {
-  name: "CreateProductType",
+  name: "CreateProduct",
   data() {
     return {
       loading: false,
       model: {},
+      productTypes: [],
+      suppliers: [],
       apiError: {
         status: null,
         message: null
@@ -139,20 +170,58 @@ export default {
     isShow: {
       default: false,
       type: Boolean
+    },
+    selectedProduct: {
+      type: String
+    },
+    selectedSupplier: {
+      type: String
     }
   },
+  watch: {
+    selectedProduct(val) {
+      this.model.productType = val;
+    },
+    selectedSupplier(val) {
+      this.model.supplier = val;
+    }
+  },
+  mounted() {
+    this.initFn();
+    this.model.productType = this.selectedProduct;
+    this.model.supplier = this.selectedSupplier;
+  },
   methods: {
+    initFn() {
+      GetALL()
+        .then(res => {
+          this.productTypes = res.data.data.productTypes.map(type => {
+            return { text: type.name, value: type._id };
+          });
+        })
+        .catch(e => console.log(e));
+      GetALLSuppliers()
+        .then(res => {
+          this.suppliers = res.data.data.suppliers.map(supplier => {
+            return {
+              text: `${supplier.firstName} ${supplier.lastName}`,
+              value: supplier._id
+            };
+          });
+        })
+        .catch(e => console.log(e));
+    },
     closeModal(productType) {
       this.$emit("onClose", productType);
     },
     submitForm() {
       this.loading = true;
-      CreateType(this.model)
+      CreateProduct(this.model)
         .then(res => {
           console.log(res);
           var payloadNotify = {
             isToast: true,
-            title: "SUCCESS! Product Type Was Created",
+            title: "SUCCESS! Product Was Created",
             content: "All data was saved successfully",
             variant: "success"
           };
@@ -167,7 +236,7 @@ export default {
 
           let payloadNotify = {
             isToast: true,
-            title: "ERROR! Product type was not Created",
+            title: "ERROR! Product was not Created",
             content: "There are errors that you need to pay attention.",
             list: [this.apiError.message],
             variant: "danger"

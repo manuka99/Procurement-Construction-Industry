@@ -112,6 +112,7 @@
       </div>
       <content-footer v-if="!$route.meta.hideFooter"></content-footer>
     </div>
+    <ToastNotification />
   </div>
 </template>
 <script>
@@ -138,13 +139,15 @@ import DashboardNavbar from "./DashboardNavbar.vue";
 import ContentFooter from "./ContentFooter.vue";
 import DashboardContent from "./Content.vue";
 import { FadeTransition } from "vue2-transitions";
+import ToastNotification from "@/components/ToastNotification";
 
 export default {
   components: {
     DashboardNavbar,
     ContentFooter,
     DashboardContent,
-    FadeTransition
+    FadeTransition,
+    ToastNotification
   },
   methods: {
     initScrollbar() {

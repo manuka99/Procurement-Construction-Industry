@@ -10,6 +10,15 @@ exports.GetAllWithSuppliers = async (req, res, next) => {
   }
 };
 
+exports.GetProductTYpe = async (req, res, next) => {
+  try {
+    var productType = await ProductTypeDao.findByIDWithProducts(req.params.id);
+    sendSuccess(res, { productType });
+  } catch (error) {
+    next(error);
+  }
+};
+
 exports.CreateProductType = async (req, res, next) => {
   try {
     var productType = await ProductTypeDao.create(req.body);
