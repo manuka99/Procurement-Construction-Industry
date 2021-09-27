@@ -10,36 +10,28 @@ const SiteSchema = new Schema(
       type: String,
       required: true,
     },
-    managers: [
-      {
-        type: Types.ObjectId,
-        ref: "user",
-        required: true,
-      },
-    ],
     allocatedBudgetValue: {
       type: Number,
       required: true,
     },
-    budgetItems: [
-      {
-        type: Types.ObjectId,
-        ref: "site_item",
-      },
-    ],
     totalSpace: {
       type: Number,
       required: true,
-    },
-    usedSpace: {
-      type: Number,
-      default: 0,
     },
     images: [
       {
         type: String,
       },
     ],
+    type: {
+      type: String,
+      default: "regular",
+      enum: ["phase", "regular"],
+    },
+    parent: {
+      type: Types.ObjectId,
+      ref: "site",
+    },
     description: String,
     noOfworkers: Number,
     estimatedDateRange: String,

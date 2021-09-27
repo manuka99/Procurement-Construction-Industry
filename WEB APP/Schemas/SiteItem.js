@@ -2,9 +2,14 @@ const { Schema, model, Types } = require("mongoose");
 
 const SiteSchema = new Schema(
   {
-    product: {
+    site: {
       type: Types.ObjectId,
-      ref: "product",
+      ref: "site",
+      required: true,
+    },
+    productType: {
+      type: Types.ObjectId,
+      ref: "product_type",
       required: true,
     },
     quantity: {

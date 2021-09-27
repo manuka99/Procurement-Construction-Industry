@@ -70,6 +70,18 @@ const routes = [
           )
       },
       {
+        path: "/sites",
+        name: "Sites",
+        component: () =>
+          import(/* webpackChunkName: "demo" */ "../views/Site/Sites.vue")
+      },
+      {
+        path: "/sites/:id",
+        name: "Site",
+        component: () =>
+          import(/* webpackChunkName: "demo" */ "../views/Site/Site.vue")
+      },
+      {
         path: "/maps",
         name: "maps",
         component: () =>

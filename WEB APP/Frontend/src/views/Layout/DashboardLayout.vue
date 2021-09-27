@@ -73,6 +73,15 @@
           }"
         >
         </sidebar-item>
+
+        <sidebar-item
+          :link="{
+            name: 'Sites',
+            path: '/sites',
+            icon: 'ni ni-key-25 text-purple'
+          }"
+        >
+        </sidebar-item>
       </template>
 
       <template slot="links-after">
