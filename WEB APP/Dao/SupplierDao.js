@@ -47,6 +47,7 @@ exports.delete = async (_id) => {
   var supplierOrderCount = await SupplierOrder.count({ supplier: _id });
   if (supplierOrderCount && supplierOrderCount > 0)
     throw new Error("Cannot delete a supplier which has orders");
-  const supplier = await supplier.deleteOne({ _id });
+  const supplier = await Supplier.deleteOne({ _id });
+  await Product.deleteMany({ supplier: _id });
   return supplier;
 };

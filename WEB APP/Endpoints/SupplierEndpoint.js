@@ -30,6 +30,16 @@ exports.GetSupplierWithProducts = async (req, res, next) => {
   }
 };
 
+exports.DeleteSupplier = async (req, res, next) => {
+  try {
+    var id = req.params.id;
+    var supplier = await SupplierDao.delete(id);
+    sendSuccess(res, { supplier: { ...supplier._doc, _id: id } });
+  } catch (error) {
+    next(error);
+  }
+};
+
 // to register Supplier
 exports.Registration = async (req, res, next) => {
   try {

@@ -81,7 +81,6 @@
             hover
             dark
             class="custom-table"
-            @row-clicked="onRowClicked"
             show-empty
           >
             <template #empty>
@@ -103,14 +102,28 @@
             </template>
 
             <template #cell(logo)="data">
-              <b-avatar
-                :text="
-                  data.item.firstName.charAt(0) + data.item.lastName.charAt(0)
-                "
-                :src="data.value"
-                :class="data.item.avatarClass"
-              >
-              </b-avatar>
+              <router-link :to="'/suppliers/' + data.item._id">
+                <div
+                  class="d-flex justify-content-start align-items-center w-100"
+                  style="cursor: pointer"
+                >
+                  <b-avatar
+                    size="2rem"
+                    :text="
+                      data.item.firstName.charAt(0) +
+                        data.item.lastName.charAt(0)
+                    "
+                    :src="data.value"
+                    :class="data.item.avatarClass"
+                  >
+                  </b-avatar>
+                  <div class="ml-3">
+                    <b-badge :class="data.item.avatarClass">{{
+                      data.item.firstName + " " + data.item.lastName
+                    }}</b-badge>
+                  </div>
+                </div>
+              </router-link>
             </template>
 
             <template #cell(name)="data">
@@ -175,7 +188,10 @@
 </template>
 
 <script>
-import { GetALLSuppliersWithProducts } from "@/services/supplier.service";
+import {
+  GetALLSuppliersWithProducts,
+  DeleteSupplier
+} from "@/services/supplier.service";
 import CreateSupplier from "./CreateSupplier";
 export default {
   name: "Suppliers",
@@ -185,8 +201,7 @@ export default {
   data() {
     return {
       fields: [
-        { key: "logo", label: "Logo" },
-        { key: "name", label: "Company Name" },
+        { key: "logo", label: "Company" },
         { key: "createdAt", label: "Joined Date" },
         { key: "address", label: "Location" },
         { key: "phone", label: "Contact" },
@@ -216,14 +231,22 @@ export default {
         .catch(e => console.log(e));
     },
     deleteItem(id) {
-      DeleteType(id)
+      DeleteSupplier(id)
         .then(res => {
-          const id = res.data.data.productType._id;
+          const id = res.data.data.supplier._id;
           const idx = this.items.findIndex(val => val._id == id);
           this.items = [
             ...this.items.slice(0, idx),
             ...this.items.slice(idx + 1)
           ];
+
+          var payloadNotify = {
+            isToast: true,
+            title: "SUCCESS! Supplier Was Deleted",
+            content: "All data related to supplier was removed successfully",
+            variant: "success"
+          };
+          this.$store.dispatch("notification/setNotify", payloadNotify);
         })
         .catch(e => console.log(e));
     },
@@ -246,9 +269,6 @@ export default {
         default:
           break;
       }
-    },
-    onRowClicked(data) {
-      this.$router.push({ name: "Supplier", params: { id: data._id } });
     }
   }
 };

@@ -67,8 +67,8 @@
 
         <sidebar-item
           :link="{
-            name: 'Suppliers',
-            path: '/suppliers',
+            name: 'Products',
+            path: '/products',
             icon: 'ni ni-key-25 text-yellow'
           }"
         >

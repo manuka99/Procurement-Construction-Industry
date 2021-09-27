@@ -62,7 +62,9 @@ router.beforeEach((to, from, next) => {
         "Types",
         "Type",
         "Suppliers",
-        "Supplier"
+        "Supplier",
+        "Products",
+        "Product"
       ];
       break;
     default:

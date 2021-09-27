@@ -2,8 +2,17 @@ const Product = require("../Schemas/Product");
 const SupplierOrderItem = require("../Schemas/SupplierOrder/SupplierOrderItem");
 
 exports.findAll = async () => {
-  const products = await Product.find();
+  const products = await Product.find()
+    .populate("supplier")
+    .populate("productType");
   return products;
+};
+
+exports.findByID = async (id) => {
+  const product = await Product.findById(id)
+    .populate("supplier")
+    .populate("productType");
+  return product;
 };
 
 exports.create = async (data) => {

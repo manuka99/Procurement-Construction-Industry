@@ -81,7 +81,6 @@
             hover
             dark
             class="custom-table"
-            @row-clicked="onRowClicked"
             show-empty
           >
             <template #empty>
@@ -104,45 +103,55 @@
             </template>
 
             <template #cell(image)="data">
-              <div>
-                <b-avatar
-                  :text="data.item.name.charAt(0) + data.item.name.charAt(1)"
-                  :src="data.value"
-                  :class="data.item.avatarClass"
+              <router-link :to="'/types/' + data.item._id">
+                <div
+                  style="cursor: pointer"
+                  class="d-flex justify-content-center w-100 align-items-center"
                 >
-                </b-avatar>
-              </div>
+                  <b-avatar
+                    :text="data.item.name.charAt(0) + data.item.name.charAt(1)"
+                    :src="data.value"
+                    size="2rem"
+                    :class="data.item.avatarClass"
+                  >
+                  </b-avatar>
+                  <div>
+                    <b-badge class="ml-4" :class="data.item.avatarClass">{{
+                      data.item.name
+                    }}</b-badge>
+                  </div>
+                </div>
+              </router-link>
             </template>
 
             <template #cell(suppliers)="data">
-              <div>
-                <div v-if="data.value.length > 0">
-                  <b-avatar-group size="2rem">
-                    <b-avatar
-                      v-for="i in data.value.slice(
-                        0,
-                        data.value.length > 4 ? 3 : 4
-                      )"
-                      :key="i"
-                      :text="
-                        i.supplier.firstName.charAt(0) +
-                          i.supplier.lastName.charAt(0)
-                      "
-                      :src="i.logo"
-                      :class="getAvatarClass()"
-                    >
-                    </b-avatar>
-                    <b-avatar
-                      v-if="data.value.length > 4"
-                      :text="'+' + (data.value.length - 4).toString()"
-                      class="bg-white text-dark"
-                    >
-                    </b-avatar>
-                  </b-avatar-group>
-                </div>
-                <div v-else>
-                  <b-badge variant="success text-white">No Suppliers</b-badge>
-                </div>
+              <div v-if="data.value.length > 0" class="w-100">
+                <b-avatar-group size="2rem">
+                  <b-avatar
+                    v-for="i in data.value.slice(
+                      0,
+                      data.value.length > 4 ? 3 : 4
+                    )"
+                    :key="i"
+                    :text="
+                      i.supplier.firstName.charAt(0) +
+                        i.supplier.lastName.charAt(0)
+                    "
+                    :src="i.logo"
+                    :class="getAvatarClass()"
+                  >
+                  </b-avatar>
+                  <b-avatar
+                    v-if="data.value.length > 4"
+                    :text="'+' + (data.value.length - 4).toString()"
+                    class="bg-white text-dark"
+                  >
+                  </b-avatar>
+                </b-avatar-group>
+              </div>
+
+              <div v-else>
+                <b-badge variant="success text-white">No Suppliers</b-badge>
               </div>
             </template>
           </b-table>
@@ -166,8 +175,7 @@ export default {
   data() {
     return {
       fields: [
-        { key: "image", label: "Image" },
-        { key: "name", label: "Product Name" },
+        { key: "image", label: "Product Type" },
         { key: "createdAt", label: "Created Date" },
         { key: "metric", label: "Measured Metrics" },
         { key: "description", label: "Description" },
@@ -176,7 +184,7 @@ export default {
       ],
       items: [],
       isShow: false,
-      createProductKey: new Date().valueOf()
+      createProductKey: new Date().valueOf().toString()
     };
   },
   mounted() {
@@ -224,9 +232,6 @@ export default {
         default:
           break;
       }
-    },
-    onRowClicked(data) {
-      this.$router.push({ name: "Type", params: { id: data._id } });
     }
   }
 };

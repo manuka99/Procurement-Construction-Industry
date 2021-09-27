@@ -94,6 +94,11 @@
                   {{ supplier.firstName + " " + supplier.lastName }}
                 </h4>
               </b-card-text>
+              <b-card-text>
+                <button class="btn btn-danger btn-sm" @click="deleteSupplier">
+                  Delete
+                </button>
+              </b-card-text>
               <b-card-text> Location: {{ supplier.address }} </b-card-text>
               <b-card-text> Email: {{ supplier.email }} </b-card-text>
               <b-card-text> Contact: {{ supplier.phone }} </b-card-text>
@@ -130,24 +135,22 @@
               </div>
             </template>
 
-            <template #cell(image)="data">
-              <b-avatar
-                :text="
-                  data.item.productType.name.charAt(0) +
-                    data.item.productType.name.charAt(1)
-                "
-                :src="data.value"
-                :class="data.item.productType.avatarClass"
-              >
-              </b-avatar>
-            </template>
-
             <template #cell(type)="data">
-              <router-link :to="'/products/' + data.value">
+              <router-link :to="'/types/' + data.item.productType._id">
                 <div
                   class="d-flex justify-content-center align-items-center"
                   style="cursor: pointer"
                 >
+                  <b-avatar
+                    class="mr-3"
+                    :text="
+                      data.item.productType.name.charAt(0) +
+                        data.item.productType.name.charAt(1)
+                    "
+                    :src="data.item.productType.image"
+                    :class="data.item.productType.avatarClass"
+                  >
+                  </b-avatar>
                   <b-badge :class="data.item.productType.avatarClass">{{
                     data.item.productType.name
                   }}</b-badge>
@@ -229,8 +232,9 @@
 </template>
 
 <script>
-import { GetSupplier } from "@/services/supplier.service";
+import { GetSupplier, DeleteSupplier } from "@/services/supplier.service";
 import CreateProduct from "@/views/Product/CreateProduct";
+import { DeleteProduct } from "@/services/product.service";
 
 export default {
   name: "Supplier",
@@ -240,7 +244,6 @@ export default {
   data() {
     return {
       fields: [
-        { key: "image", label: "Image" },
         { key: "type", label: "Product Type" },
         { key: "_id", label: "Product ID" },
         { key: "brand", label: "Product Brand" },
@@ -294,14 +297,38 @@ export default {
       }
     },
     deleteItem(id) {
-      DeleteType(id)
+      DeleteProduct(id)
         .then(res => {
-          const id = res.data.data.productType._id;
+          const id = res.data.data.product._id;
           const idx = this.items.findIndex(val => val._id == id);
           this.items = [
             ...this.items.slice(0, idx),
             ...this.items.slice(idx + 1)
           ];
+
+          var payloadNotify = {
+            isToast: true,
+            title: "SUCCESS! Product Was Deleted",
+            content: "All data related to product was removed successfully",
+            variant: "success"
+          };
+          this.$store.dispatch("notification/setNotify", payloadNotify);
+        })
+        .catch(e => console.log(e));
+    },
+    deleteSupplier() {
+      DeleteSupplier(this.supplier._id)
+        .then(res => {
+          console.log(res);
+          this.$router.push({ name: "Suppliers", replace: true });
+
+          var payloadNotify = {
+            isToast: true,
+            title: "SUCCESS! Supplier Was Deleted",
+            content: "All data was removed successfully",
+            variant: "success"
+          };
+          this.$store.dispatch("notification/setNotify", payloadNotify);
         })
         .catch(e => console.log(e));
     }

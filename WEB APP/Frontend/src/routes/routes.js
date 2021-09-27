@@ -50,6 +50,18 @@ const routes = [
           )
       },
       {
+        path: "/products",
+        name: "Products",
+        component: () =>
+          import(/* webpackChunkName: "demo" */ "../views/Product/Products.vue")
+      },
+      {
+        path: "/products/:id",
+        name: "Product",
+        component: () =>
+          import(/* webpackChunkName: "demo" */ "../views/Product/Product.vue")
+      },
+      {
         path: "/profile",
         name: "Profile",
         component: () =>

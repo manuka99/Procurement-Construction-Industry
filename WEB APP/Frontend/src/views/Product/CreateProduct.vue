@@ -196,7 +196,10 @@ export default {
       GetALL()
         .then(res => {
           this.productTypes = res.data.data.productTypes.map(type => {
-            return { text: type.name, value: type._id };
+            return {
+              text: type.name + " (" + type.metric + ")",
+              value: type._id
+            };
           });
         })
         .catch(e => console.log(e));

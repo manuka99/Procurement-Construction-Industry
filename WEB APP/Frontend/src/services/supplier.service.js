@@ -11,10 +11,6 @@ export const GetSupplier = id => {
   return Api().get(`/auth/suppliers/${id}`);
 };
 
-export const CreateType = payload => {
-  return Api().post(`/auth/types`, payload);
-};
-
-export const DeleteType = id => {
-  return Api().delete(`/auth/types/${id}`);
+export const DeleteSupplier = id => {
+  return Api().delete(`/auth/suppliers/${id}`);
 };
