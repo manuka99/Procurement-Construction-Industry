@@ -9,6 +9,15 @@ exports.GetRequestUser = (req, res, next) => {
   return sendSuccess(res, { user: req.user });
 };
 
+exports.GetAllSiteManagers = async (req, res, next) => {
+  try {
+    const users = await UserDao.AllSiteManagers();
+    return sendSuccess(res, { users });
+  } catch (error) {
+    next(error);
+  }
+};
+
 exports.Registration = (req, res, next) => {
   const { role } = req.body;
   switch (role) {

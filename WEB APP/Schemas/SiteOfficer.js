@@ -12,6 +12,8 @@ const SiteOfficerSchema = new Schema(
       ref: "user",
       required: true,
     },
+    role: String,
+    description: String,
   },
   { timestamps: true }
 );

@@ -68,22 +68,61 @@
             <h3 class="mb-3 text-white">
               Construction Site - {{ siteData.name }}
             </h3>
-            <div>
-              <button class="btn btn-success btn-sm" @click="isShow = true">
-                Create New Phase
-              </button>
+            <div class="d-flex align-items-center">
+              <div class="mr-2">
+                <button class="btn btn-danger btn-sm" @click="deleteItem">
+                  Delete this site
+                </button>
+              </div>
+              <div>
+                <button
+                  class="btn btn-success btn-sm"
+                  @click="isShow = true"
+                  v-if="siteData.type == 'phase'"
+                >
+                  Create New Phase
+                </button>
+              </div>
             </div>
           </b-card-header>
           <b-card-body class="pt-0">
             <hr class="text-white border-bottom mt-0 mb-4" />
-            <span class="text-white"> {{ JSON.stringify(siteData) }}</span>
-            <div>
-              <button class="btn btn-success btn-sm" @click="isShow = true">
-                Create New Phase
-              </button>
-              <button class="btn btn-success btn-sm" @click="deleteItem">
-                Delete this site
-              </button>
+            <span class="text-white"> {{ siteData.description }}</span>
+            <div class="mt-3">
+              <b-tabs
+                content-class="mt-3 mheight-400"
+                nav-class="nav-head"
+                active-nav-item-class="activeNav"
+                nav-item-class="activeNav"
+              >
+                <b-tab title="Site Information" active
+                  ><div>
+                    <SiteInfo
+                      :key="siteInfoKey"
+                      :siteInfo="siteData"
+                      @onUpdated="refreshData"
+                    />
+                  </div>
+                </b-tab>
+                <b-tab title="Site Budget" lazy
+                  ><div>
+                    <SiteOfficers
+                      :key="siteBudgetKey"
+                      :siteInfo="siteData"
+                      @onUpdated="refreshData"
+                    /></div
+                ></b-tab>
+                <b-tab title="Site Officers" lazy
+                  ><div>
+                    <SiteOfficers
+                      :key="siteOfficersKey"
+                      :siteInfo="siteData"
+                      @onUpdated="refreshData"
+                    /></div
+                ></b-tab>
+                <b-tab title="Site Orders" lazy><div></div></b-tab>
+                <b-tab title="Site Phases" lazy><div></div></b-tab>
+              </b-tabs>
             </div>
           </b-card-body>
         </b-card>
@@ -91,7 +130,7 @@
       <CreateSite
         :isShow="isShow"
         @onClose="onClose"
-        :key="createProductKey"
+        :key="createSiteKey"
         :parentSite="siteID"
       />
     </b-container>
@@ -101,17 +140,26 @@
 <script>
 import { GetSite, DeleteSite } from "@/services/site.service";
 import CreateSite from "./CreateSite";
+import SiteInfo from "./SiteInfo";
+import SiteBudget from "./SiteBudget";
+import SiteOfficers from "./SiteOfficers";
 export default {
   name: "Site",
   components: {
-    CreateSite
+    CreateSite,
+    SiteInfo,
+    SiteBudget,
+    SiteOfficers
   },
   data() {
     return {
       isShow: false,
       siteID: null,
-      siteData: null,
-      createProductKey: new Date().valueOf().toString() + 1000
+      siteData: {},
+      createSiteKey: new Date().valueOf().toString() + 1000,
+      siteInfoKey: new Date().valueOf().toString() + 2000,
+      siteBudgetKey: new Date().valueOf().toString() + 3000,
+      siteOfficersKey: new Date().valueOf().toString() + 4000
     };
   },
   mounted() {
@@ -143,10 +191,13 @@ export default {
         })
         .catch(e => console.log(e));
     },
-    onClose() {
-      this.isShow = false;
-      this.createProductKey = new Date().valueOf().toString();
+    refreshData() {
+      // this.siteKey = new Date().valueOf().toString();
       this.initFn();
+      this.createSiteKey = new Date().valueOf().toString() + 1000;
+      this.siteInfoKey = new Date().valueOf().toString() + 2000;
+      this.siteBudgetKey = new Date().valueOf().toString() + 3000;
+      this.siteOfficersKey = new Date().valueOf().toString() + 4000;
     },
     getAvatarClass() {
       const val = Math.floor(Math.random() * 4 + 1);
@@ -167,4 +218,39 @@ export default {
 };
 </script>
 
-<style></style>
+<style>
+.mheight-400 {
+  min-height: 400px;
+  background-color: rgb(0, 30, 60);
+  direction: ltr;
+  border-radius: 10px;
+  border: 1px solid rgb(19, 47, 76);
+  overflow: auto;
+  max-width: calc(100vw - 32px);
+}
+
+.nav-head li a {
+  background-color: none;
+  border-right: 4px solid transparent !important;
+  border-left: 4px solid transparent !important;
+  border-top: 4px solid transparent !important;
+  outline: none !important;
+  padding: 14px;
+}
+
+.nav-head li a:not(.activeNav) {
+  color: #7f8e9d;
+  border: 4px solid transparent !important;
+}
+
+.nav-head li a:hover {
+  outline: none !important;
+  border: 4px solid transparent !important;
+}
+
+.activeNav {
+  color: rgb(144, 202, 249) !important;
+  background-color: transparent !important;
+  border-bottom: 4px solid rgb(144, 202, 249) !important;
+}
+</style>

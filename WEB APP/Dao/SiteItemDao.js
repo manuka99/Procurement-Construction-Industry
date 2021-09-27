@@ -12,7 +12,16 @@ exports.create = async (data) => {
   return siteItem;
 };
 
-exports.delete = async (_id) => {
-  const siteItem = await SiteItem.deleteOne({ _id });
-  return { ...siteItem._id, _id };
+exports.updateMany = async (data) => {
+  const siteItem = await SiteItem.deleteMany({ site: data[0].site });
+  const result = await SiteItem.bulkWrite(
+    data.map((item) => ({
+      updateOne: {
+        filter: { _id: item._id ? item._id : Types.ObjectId() },
+        update: { $set: item },
+        upsert: true,
+      },
+    }))
+  );
+  return result;
 };

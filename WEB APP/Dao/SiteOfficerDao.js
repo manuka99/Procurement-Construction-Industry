@@ -1,7 +1,9 @@
 const SiteOfficer = require("../Schemas/SiteOfficer");
 
 exports.findAllBasedOnSite = async (siteID) => {
-  const siteOfficers = await SiteOfficer.find({ site: siteID });
+  const siteOfficers = await SiteOfficer.find({ site: siteID }).populate(
+    "officer"
+  );
   return siteOfficers;
 };
 
@@ -10,7 +12,16 @@ exports.create = async (data) => {
   return siteOfficer;
 };
 
-exports.delete = async (_id) => {
-  const siteOfficer = await SiteOfficer.deleteOne({ _id });
-  return { ...siteOfficer._doc, _id };
+exports.updateMany = async (data) => {
+  const siteOfficers = await SiteOfficer.deleteMany({ site: data[0].site });
+  const result = await SiteOfficer.bulkWrite(
+    data.map((item) => ({
+      updateOne: {
+        filter: { _id: item._id ? item._id : Types.ObjectId() },
+        update: { $set: item },
+        upsert: true,
+      },
+    }))
+  );
+  return result;
 };

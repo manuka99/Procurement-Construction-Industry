@@ -36,7 +36,7 @@ exports.CreateSite = async (req, res, next) => {
 exports.UpdateSite = async (req, res, next) => {
   try {
     if (req.body.type != "phase") req.body.parent = undefined;
-    var site = await SiteDao.update(req.body);
+    var site = await SiteDao.update(req.params.id, req.body);
     sendSuccess(res, { site });
   } catch (error) {
     next(error);
@@ -75,11 +75,11 @@ exports.CreateSiteItem = async (req, res, next) => {
   }
 };
 
-// delete site item
-exports.DeleteSiteItem = async (req, res, next) => {
+// delete and replace site item
+exports.UpdateSiteItems = async (req, res, next) => {
   try {
-    var siteItem = await SiteItemDao.delete(req.params.id);
-    sendSuccess(res, { siteItem });
+    var siteItems = await SiteItemDao.updateMany(req.body);
+    sendSuccess(res, { siteItems });
   } catch (error) {
     next(error);
   }
@@ -107,11 +107,11 @@ exports.CreateSiteOfficer = async (req, res, next) => {
   }
 };
 
-// delete Site Officer
-exports.DeleteSiteOfficer = async (req, res, next) => {
+// delete and replace Site Officer
+exports.UpdateSiteOfficer = async (req, res, next) => {
   try {
-    var siteOfficer = await SiteOfficerDao.delete(req.params.id);
-    sendSuccess(res, { siteOfficer });
+    var siteOfficers = await SiteOfficerDao.updateMany(req.body);
+    sendSuccess(res, { siteOfficers });
   } catch (error) {
     next(error);
   }

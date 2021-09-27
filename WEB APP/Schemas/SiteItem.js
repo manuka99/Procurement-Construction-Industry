@@ -13,8 +13,8 @@ const SiteSchema = new Schema(
       required: true,
     },
     quantity: {
+      default: 10,
       type: Number,
-      required: true,
     },
     brand: String,
     description: String,

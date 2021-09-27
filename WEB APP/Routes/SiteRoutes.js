@@ -8,12 +8,12 @@ exports.SiteRoutes = (app) => {
   app.put("/api/auth/sites/:id", SiteEndpoint.UpdateSite);
 
   // ------ Site Item (Budget Item)
-  app.get("/api/auth/sites-items", SiteEndpoint.GetSiteItems);
+  app.get("/api/auth/sites-items/:id", SiteEndpoint.GetSiteItems);
   app.post("/api/auth/sites-items", SiteEndpoint.CreateSiteItem);
-  app.delete("/api/auth/sites-items/:id", SiteEndpoint.DeleteSiteItem);
+  app.put("/api/auth/sites-items/", SiteEndpoint.UpdateSiteItems);
 
   // ------ Site Officer
-  app.get("/api/auth/sites-officers", SiteEndpoint.GetSiteOfficers);
+  app.get("/api/auth/sites-officers/:id", SiteEndpoint.GetSiteOfficers);
   app.post("/api/auth/sites-officers", SiteEndpoint.CreateSiteOfficer);
-  app.delete("/api/auth/sites-officers/:id", SiteEndpoint.DeleteSiteOfficer);
+  app.put("/api/auth/sites-officers", SiteEndpoint.UpdateSiteOfficer);
 };
