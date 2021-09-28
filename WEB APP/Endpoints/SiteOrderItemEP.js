@@ -2,18 +2,9 @@ const { sendSuccess } = require("../Common/util");
 const SiteOrderItemDao = require("../Dao/SiteOrderItemDao");
 
 // find all
-exports.GetAllOrderItems = async (req, res, next) => {
+exports.GetAllOrderItemsBySiteOrder = async (req, res, next) => {
   try {
-    var siteOrders = await SiteOrderItemDao.findAll();
-    sendSuccess(res, { siteOrders });
-  } catch (error) {
-    next(error);
-  }
-};
-
-exports.GetAllOrderItemsBySite = async (req, res, next) => {
-  try {
-    var siteOrders = await SiteOrderItemDao.findAllBySiteOrder(req.params.id); //site Id
+    var siteOrders = await SiteOrderItemDao.findAllBySiteOrder(req.params.id); //site Order Id
     sendSuccess(res, { siteOrders });
   } catch (error) {
     next(error);
