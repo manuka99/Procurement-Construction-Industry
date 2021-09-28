@@ -11,6 +11,15 @@ exports.GetAllOrders = async (req, res, next) => {
   }
 };
 
+exports.GetSiteOrder = async (req, res, next) => {
+  try {
+    var siteOrder = await SiteOrderDao.findByID(req.params.id);
+    sendSuccess(res, { siteOrder });
+  } catch (error) {
+    next(error);
+  }
+};
+
 exports.GetAllOrdersBySite = async (req, res, next) => {
   try {
     var siteOrders = await SiteOrderDao.findAllBySite(req.params.id);
@@ -31,7 +40,7 @@ exports.Create = async (req, res, next) => {
 
 exports.Update = async (req, res, next) => {
   try {
-    var siteOrder = await SiteOrderDao.create(req.params.id, req.body);
+    var siteOrder = await SiteOrderDao.update(req.params.id, req.body);
     sendSuccess(res, { siteOrder });
   } catch (error) {
     next(error);

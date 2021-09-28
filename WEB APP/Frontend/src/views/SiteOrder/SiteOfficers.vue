@@ -23,13 +23,13 @@
         <b-col cols="12" sm="6">
           <b-form-group
             id="input-group-3"
-            label="Product Type (Default QTY = 10)"
+            label="User Account"
             label-for="input-3"
           >
             <b-form-select
               id="input-3"
-              v-model="newProductType"
-              :options="productTypes"
+              v-model="newUserType"
+              :options="users"
               required
             ></b-form-select> </b-form-group
         ></b-col>
@@ -42,14 +42,14 @@
           >
             <base-button
               class="btn btn-primary"
-              @click="createSiteItem"
+              @click="createSiteOfficer"
               :loading="loadingAdd"
             >
-              Add Budget Item
+              Add as an Officer
             </base-button>
           </b-form-group>
         </b-col>
-        <b-col cols="12" sm="4" v-for="item in siteItems" :key="item._id">
+        <b-col cols="12" sm="4" v-for="item in siteOfficers" :key="item._id">
           <div class="w-100 bg-white shadow p-3 mb-5 bg-white rounded">
             <div class="d-flex align-items-center">
               <b-icon
@@ -59,29 +59,20 @@
                 style="cursor: pointer"
                 @click="deleteItem(item._id)"
               ></b-icon>
-              <router-link
-                :to="'/types/' + item.productType._id"
-                target="_blank"
-              >
+              <router-link :to="'/users/' + item.officer._id" target="_blank">
                 <a class="btn btn-link ">
-                  {{ item.productType.name }} ({{ item.productType.metric }})
+                  {{ item.officer.firstName + " " + item.officer.lastName }} ({{
+                    item.officer.email
+                  }})
                 </a>
               </router-link>
             </div>
-            <b-input-group prepend="QTY" class="mb-3">
+            <b-input-group prepend="ROLE" class="mb-3">
               <b-form-input
                 id="input-1"
-                v-model="item.quantity"
-                type="number"
-                placeholder="Type Item Quantity...."
-              ></b-form-input>
-            </b-input-group>
-            <b-input-group prepend="BRD" class="mb-3">
-              <b-form-input
-                id="input-1"
-                v-model="item.brand"
+                v-model="item.role"
                 type="text"
-                placeholder="Type Item Brand...."
+                placeholder="Type Item Role...."
               ></b-form-input>
             </b-input-group>
             <b-input-group prepend="DES" class="mb-3">
@@ -112,11 +103,11 @@
 <script>
 // services
 import {
-  UpdateSiteItem,
-  CreateSiteItem,
-  GetSiteItems
+  UpdateSiteOfficer,
+  CreateSiteOfficer,
+  GetSiteOfficers
 } from "@/services/site.service";
-import { GetALL } from "@/services/types.service";
+import { GetSiteManagers } from "@/services/user.service";
 
 export default {
   name: "SiteInfo",
@@ -124,9 +115,9 @@ export default {
     return {
       loading: false,
       loadingAdd: false,
-      newProductType: null,
-      productTypes: [{ value: null, text: "Select a product type" }],
-      siteItems: [],
+      newUserType: null,
+      users: [{ value: null, text: "Select a user" }],
+      siteOfficers: [],
       siteID: null,
       siteInfo: {},
       siteTypes: [
@@ -145,26 +136,22 @@ export default {
   },
   methods: {
     initFn() {
-      GetALL()
+      GetSiteManagers()
         .then(res => {
-          console.log(res.data.data);
-          var data = res.data.data.productTypes.map(type => {
+          var data = res.data.data.users.map(user => {
             return {
-              text: type.name + " (" + type.metric + ")",
-              value: type._id
+              text: user.email,
+              value: user._id
             };
           });
           console.log(data);
-          this.productTypes = [
-            { value: null, text: "Select a product type" },
-            ...data
-          ];
+          this.users = [{ value: null, text: "Select a user" }, ...data];
         })
         .catch(e => console.log(e));
-      GetSiteItems(this.siteID)
+      GetSiteOfficers(this.siteID)
         .then(res => {
           console.log(res.data.data);
-          this.siteItems = res.data.data.siteItems;
+          this.siteOfficers = res.data.data.siteOfficers;
         })
         .catch(e => console.log(e));
     },
@@ -173,12 +160,12 @@ export default {
     },
     submitForm() {
       this.loading = true;
-      UpdateSiteItem(this.siteID, this.siteItems)
+      UpdateSiteOfficer(this.siteOfficers)
         .then(res => {
           console.log(res);
           var payloadNotify = {
             isToast: true,
-            title: "SUCCESS! Budget Items Was Updated",
+            title: "SUCCESS! Site Officers were Updated",
             content: "All data was saved successfully",
             variant: "success"
           };
@@ -193,22 +180,22 @@ export default {
         })
         .finally(() => (this.loading = false));
     },
-    createSiteItem() {
+    createSiteOfficer() {
       this.loadingAdd = true;
-      CreateSiteItem({
+      CreateSiteOfficer({
         site: this.siteID,
-        productType: this.newProductType
+        officer: this.newUserType
       })
         .then(res => {
           console.log(res);
           var payloadNotify = {
             isToast: true,
-            title: "SUCCESS! Item Was Added",
+            title: "SUCCESS! User Was Assigned",
             content: "All data were saved successfully",
             variant: "success"
           };
           this.$store.dispatch("notification/setNotify", payloadNotify);
-          this.newProductType = null;
+          this.newUserType = null;
           this.initFn();
         })
         .catch(err => {
@@ -220,10 +207,10 @@ export default {
         .finally(() => (this.loadingAdd = false));
     },
     deleteItem(id) {
-      const idx = this.siteItems.findIndex(val => val._id == id);
-      this.siteItems = [
-        ...this.siteItems.slice(0, idx),
-        ...this.siteItems.slice(idx + 1)
+      const idx = this.siteOfficers.findIndex(val => val._id == id);
+      this.siteOfficers = [
+        ...this.siteOfficers.slice(0, idx),
+        ...this.siteOfficers.slice(idx + 1)
       ];
     }
   }

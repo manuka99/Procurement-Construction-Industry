@@ -30,8 +30,8 @@ export const CreateSiteItem = data => {
   return Api().post(`/auth/sites-items`, data);
 };
 
-export const UpdateSiteItem = data => {
-  return Api().put(`/auth/sites-items/`, data);
+export const UpdateSiteItem = (id, data) => {
+  return Api().put(`/auth/sites-items/${id}`, data);
 };
 
 // ------ Site Officer
@@ -44,6 +44,45 @@ export const CreateSiteOfficer = data => {
   return Api().post(`/auth/sites-officers`, data);
 };
 
-export const UpdateSiteOfficer = data => {
-  return Api().put(`/auth/sites-officers/`, data);
+export const UpdateSiteOfficer = (id, data) => {
+  return Api().put(`/auth/sites-officers/${id}`, data);
+};
+
+// ------ Site orders
+
+export const GetSiteOrders = id => {
+  return Api().get(`/auth/sites/site-orders/${id}`);
+};
+
+export const GetSiteOrder = id => {
+  return Api().get(`/auth/site-orders/${id}`);
+};
+
+export const DeleteSiteOrder = id => {
+  return Api().delete(`/auth/site-orders/${id}`);
+};
+
+export const CreateSiteOrder = data => {
+  return Api().post(`/auth/site-orders`, data);
+};
+
+export const UpdateSiteOrder = (id, data) => {
+  return Api().put(`/auth/site-orders/${id}`, data);
+};
+// ------ Site orders items
+
+export const GetSiteOrderItems = id => {
+  return Api().get(`/auth/site-order-items/${id}`);
+};
+
+export const CreateSiteOrderItem = data => {
+  return Api().post(`/auth/site-order-items`, data);
+};
+
+export const DeleteSiteOrderItem = id => {
+  return Api().delete(`/auth/site-order-items/${id}`);
+};
+
+export const UpdateSiteOrderItem = (id, data) => {
+  return Api().put(`/auth/site-order-items/${id}`, data);
 };

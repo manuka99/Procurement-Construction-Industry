@@ -17,6 +17,7 @@ const SiteOrderSchema = new Schema(
       enum: ["Pending", "Approved", "Partialy Approved", "Declined", "Placed"],
       default: "Pending",
     },
+    name: String,
     description: String,
     statusDescription: String,
   },

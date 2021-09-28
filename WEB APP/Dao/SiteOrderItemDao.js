@@ -16,24 +16,23 @@ exports.create = async (data) => {
   return siteOrderItem;
 };
 
-exports.update = async (_id, { status, description, statusDescription }) => {
+exports.update = async (_id, { status, statusDescription }) => {
   const siteOrderItem = await SiteOrderItem.updateOne(
     { _id },
-    { status, description, statusDescription }
+    { status, statusDescription }
   );
   return siteOrderItem;
 };
 
 exports.delete = async (id) => {
   // get site order items
-  const siteOrderItem = await SiteOrderItem.find({
+  const siteOrderItem = await SiteOrderItem.findOne({
     _id: id,
   });
+
   // validate site order item
-  if (siteOrderItem.status != "pending")
-    throw new Error(
-      "Cannot delete a order, where its order item is proccessed"
-    );
+  if (siteOrderItem.status != "Pending")
+    throw new Error("Cannot delete a order item, where it is proccessed");
   const supplierOrders = await SupplierOrder.find({
     siteOrderItemID: siteOrderItem._id,
   });
@@ -41,9 +40,9 @@ exports.delete = async (id) => {
   for (let index2 = 0; index2 < supplierOrders.length; index2++) {
     const supplierOrder = supplierOrders[index2];
     // validate supplier order
-    if (supplierOrder.status != "pending")
+    if (supplierOrder.status != "Pending")
       throw new Error(
-        "Cannot delete a order, where its supplier order is already proccessed"
+        "Cannot delete a order item, where its supplier order is already proccessed"
       );
     // get supplier order items
     const supplierOrderItems = await SupplierOrderItem.find({
@@ -52,9 +51,9 @@ exports.delete = async (id) => {
     for (let index3 = 0; index3 < supplierOrderItems.length; index3++) {
       const supplierOrderItem = supplierOrderItems[index3];
       // validate supplier order item
-      if (supplierOrderItem.status != "pending")
+      if (supplierOrderItem.status != "Pending")
         throw new Error(
-          "Cannot delete a order, where its supplier order item is already proccessed"
+          "Cannot delete a order item, where its supplier order item is already proccessed"
         );
     }
   }

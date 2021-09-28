@@ -8,6 +8,13 @@ exports.findAll = async () => {
   return siteOrders;
 };
 
+exports.findByID = async (id) => {
+  const siteOrder = await SiteOrder.findById(id)
+    .populate("user")
+    .populate("site");
+  return siteOrder;
+};
+
 exports.findAllBySite = async (siteID) => {
   const siteOrders = await SiteOrder.find({ site: siteID }).populate("user");
   return siteOrders;
@@ -19,7 +26,10 @@ exports.create = async (data) => {
   return siteOrder;
 };
 
-exports.update = async (_id, { status, description, statusDescription }) => {
+exports.update = async (
+  _id,
+  { status, name, description, statusDescription }
+) => {
   const siteOrder = await SiteOrder.updateOne(
     { _id },
     { status, description, statusDescription }
@@ -30,7 +40,7 @@ exports.update = async (_id, { status, description, statusDescription }) => {
 exports.delete = async (id) => {
   const siteOrder = await SiteOrder.findById(id);
   // validate order
-  if (siteOrder.status != "pending")
+  if (siteOrder.status != "Pending")
     throw new Error(
       "Cannot delete a order, where its status is " + siteOrder.status
     );
@@ -41,7 +51,7 @@ exports.delete = async (id) => {
   for (let index = 0; index < siteOrderItems.length; index++) {
     const siteOrderItem = siteOrderItems[index];
     // validate site order item
-    if (siteOrderItem.status != "pending")
+    if (siteOrderItem.status != "Pending")
       throw new Error(
         "Cannot delete a order, where its order item is proccessed"
       );
@@ -52,7 +62,7 @@ exports.delete = async (id) => {
     for (let index2 = 0; index2 < supplierOrders.length; index2++) {
       const supplierOrder = supplierOrders[index2];
       // validate supplier order
-      if (supplierOrder.status != "pending")
+      if (supplierOrder.status != "Pending")
         throw new Error(
           "Cannot delete a order, where its supplier order is already proccessed"
         );
@@ -63,7 +73,7 @@ exports.delete = async (id) => {
       for (let index3 = 0; index3 < supplierOrderItems.length; index3++) {
         const supplierOrderItem = supplierOrderItems[index3];
         // validate supplier order item
-        if (supplierOrderItem.status != "pending")
+        if (supplierOrderItem.status != "Pending")
           throw new Error(
             "Cannot delete a order, where its supplier order item is already proccessed"
           );

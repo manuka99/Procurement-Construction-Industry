@@ -66,34 +66,20 @@
         <b-card no-body class="bg-default shadow">
           <b-card-header class="d-flex flex-column bg-transparent border-0">
             <h3 class="mb-0 text-white">
-              Construction {{ siteData.parent != null ? "Phase" : "Site" }} -
-              {{ siteData.name }}
+              Construction Site Order -
+              {{ siteOrderData.name }}
             </h3>
-            <h4
-              class="text-white d-flex align-items-center mb-0"
-              v-if="siteData.parent != null"
-            >
-              Parent Site:
-              <router-link
-                :to="'/sites/' + siteData.parent._id"
-                target="_blank"
-              >
-                <a class="btn btn-link ">
-                  {{ siteData.parent.name }}
-                </a>
-              </router-link>
-            </h4>
             <div class="mt-3 d-flex align-items-center">
               <div class="mr-2">
                 <button class="btn btn-danger btn-sm" @click="deleteItem">
-                  Delete this site
+                  Delete this order
                 </button>
               </div>
             </div>
           </b-card-header>
           <b-card-body class="pt-0">
             <hr class="text-white border-bottom mt-0 mb-4" />
-            <span class="text-white"> {{ siteData.description }}</span>
+            <span class="text-white"> {{ siteOrderData.description }}</span>
             <div class="mt-3">
               <b-tabs
                 content-class="mt-3 mheight-400"
@@ -101,44 +87,20 @@
                 active-nav-item-class="activeNav"
                 nav-item-class="activeNav"
               >
-                <b-tab title="Site Information" active
+                <b-tab title="Order Information" active
                   ><div>
-                    <SiteInfo
+                    <SiteOrderInfo
                       :key="siteInfoKey"
-                      :siteInfo="siteData"
+                      :siteInfo="siteOrderData"
                       @onUpdated="refreshData"
                     />
                   </div>
                 </b-tab>
-                <b-tab title="Site Budget" lazy
+                <b-tab title="Order Items" lazy
                   ><div>
-                    <SiteBudget
+                    <SiteOrderItem
                       :key="siteBudgetKey"
-                      :siteInfo="siteData"
-                      @onUpdated="refreshData"
-                    /></div
-                ></b-tab>
-                <b-tab title="Site Officers" lazy
-                  ><div>
-                    <SiteOfficers
-                      :key="siteOfficersKey"
-                      :siteInfo="siteData"
-                      @onUpdated="refreshData"
-                    /></div
-                ></b-tab>
-                <b-tab title="Site Orders" lazy
-                  ><div>
-                    <SiteOrders
-                      :key="siteOrdersKey"
-                      :siteInfo="siteData"
-                      @onUpdated="refreshData"
-                    /></div
-                ></b-tab>
-                <b-tab title="Site Phases" lazy
-                  ><div>
-                    <SitePhase
-                      :key="sitePhasesKey"
-                      :siteInfo="siteData"
+                      :siteInfo="siteOrderData"
                       @onUpdated="refreshData"
                     /></div
                 ></b-tab>
@@ -152,38 +114,35 @@
 </template>
 
 <script>
-import { GetSite, DeleteSite } from "@/services/site.service";
+import { GetSiteOrder, DeleteSiteOrder } from "@/services/site.service";
 import CreateSite from "./CreateSite";
-import SiteInfo from "./SiteInfo";
-import SiteBudget from "./SiteBudget";
+import SiteOrderInfo from "./SiteOrderInfo";
+import SiteOrderItem from "./SiteOrderItem";
 import SiteOfficers from "./SiteOfficers";
 import SitePhase from "./SitePhase";
-import SiteOrders from "./SiteOrders";
 export default {
   name: "Site",
   components: {
     CreateSite,
-    SiteInfo,
-    SiteBudget,
+    SiteOrderInfo,
+    SiteOrderItem,
     SiteOfficers,
-    SitePhase,
-    SiteOrders
+    SitePhase
   },
   data() {
     return {
       isShow: false,
-      siteID: null,
-      siteData: {},
+      siteOrderID: null,
+      siteOrderData: {},
       createSiteKey: new Date().valueOf().toString() + 1000,
       siteInfoKey: new Date().valueOf().toString() + 2000,
       siteBudgetKey: new Date().valueOf().toString() + 3000,
       siteOfficersKey: new Date().valueOf().toString() + 4000,
-      sitePhasesKey: new Date().valueOf().toString() + 5000,
-      siteOrdersKey: new Date().valueOf().toString() + 6000
+      sitePhasesKey: new Date().valueOf().toString() + 4000
     };
   },
   mounted() {
-    this.siteID = this.$route.params.id;
+    this.siteOrderID = this.$route.params.id;
     this.initFn();
   },
   watch: {
@@ -191,31 +150,31 @@ export default {
   },
   methods: {
     initFn() {
-      this.siteID = this.$route.params.id;
-      GetSite(this.siteID)
+      this.siteOrderID = this.$route.params.id;
+      GetSiteOrder(this.siteOrderID)
         .then(res => {
           console.log(res.data.data);
-          var object = res.data.data.site;
+          var object = res.data.data.siteOrder;
           object.avatarClass = this.getAvatarClass();
           object.createdAt = object.createdAt.split("T")[0];
-          this.siteData = object;
+          this.siteOrderData = object;
         })
         .catch(e => console.log(e));
     },
     deleteItem() {
-      DeleteSite(this.siteID)
+      DeleteSiteOrder(this.siteOrderID)
         .then(() => {
           var payloadNotify = {
             isToast: true,
-            title: "SUCCESS! Site Was Deleted",
-            content: "All data related to site was removed successfully",
+            title: "SUCCESS! Site Order Was Deleted",
+            content: "All data related to site order was removed successfully",
             variant: "success"
           };
           this.$store.dispatch("notification/setNotify", payloadNotify);
-          if (this.siteData.parent)
+          if (this.siteOrderData.parent)
             this.$router.push({
               name: "Site",
-              params: { id: this.siteData.parent._id }
+              params: { id: this.siteOrderData.parent._id }
             });
           else this.$router.push({ name: "Sites", replace: true });
         })
@@ -228,8 +187,7 @@ export default {
       this.siteInfoKey = new Date().valueOf().toString() + 2000;
       this.siteBudgetKey = new Date().valueOf().toString() + 3000;
       this.siteOfficersKey = new Date().valueOf().toString() + 4000;
-      this.sitePhasesKey = new Date().valueOf().toString() + 5000;
-      this.siteOrdersKey = new Date().valueOf().toString() + 6000;
+      this.sitePhasesKey = new Date().valueOf().toString() + 4000;
     },
     onClose() {
       this.isShow = false;

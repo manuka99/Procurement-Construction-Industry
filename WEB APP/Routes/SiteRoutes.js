@@ -10,10 +10,10 @@ exports.SiteRoutes = (app) => {
   // ------ Site Item (Budget Item)
   app.get("/api/auth/sites-items/:id", SiteEndpoint.GetSiteItems);
   app.post("/api/auth/sites-items", SiteEndpoint.CreateSiteItem);
-  app.put("/api/auth/sites-items/", SiteEndpoint.UpdateSiteItems);
+  app.put("/api/auth/sites-items/:id", SiteEndpoint.UpdateSiteItems);
 
   // ------ Site Officer
   app.get("/api/auth/sites-officers/:id", SiteEndpoint.GetSiteOfficers);
   app.post("/api/auth/sites-officers", SiteEndpoint.CreateSiteOfficer);
-  app.put("/api/auth/sites-officers", SiteEndpoint.UpdateSiteOfficer);
+  app.put("/api/auth/sites-officers/:id", SiteEndpoint.UpdateSiteOfficer);
 };

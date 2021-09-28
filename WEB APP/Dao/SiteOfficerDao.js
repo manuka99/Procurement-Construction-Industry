@@ -12,8 +12,8 @@ exports.create = async (data) => {
   return siteOfficer;
 };
 
-exports.updateMany = async (data) => {
-  const siteOfficers = await SiteOfficer.deleteMany({ site: data[0].site });
+exports.updateMany = async (siteID, data) => {
+  await SiteOfficer.deleteMany({ site: siteID });
   const result = await SiteOfficer.bulkWrite(
     data.map((item) => ({
       updateOne: {

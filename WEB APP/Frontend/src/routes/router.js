@@ -66,7 +66,8 @@ router.beforeEach((to, from, next) => {
         "Products",
         "Product",
         "Sites",
-        "Site"
+        "Site",
+        "Order"
       ];
       break;
     default:

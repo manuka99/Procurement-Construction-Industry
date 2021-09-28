@@ -160,7 +160,7 @@ export default {
     },
     submitForm() {
       this.loading = true;
-      UpdateSiteOfficer(this.siteOfficers)
+      UpdateSiteOfficer(this.siteID, this.siteOfficers)
         .then(res => {
           console.log(res);
           var payloadNotify = {

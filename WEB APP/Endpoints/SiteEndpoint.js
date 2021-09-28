@@ -77,7 +77,7 @@ exports.CreateSiteItem = async (req, res, next) => {
 // delete and replace site item
 exports.UpdateSiteItems = async (req, res, next) => {
   try {
-    var siteItems = await SiteItemDao.updateMany(req.body);
+    var siteItems = await SiteItemDao.updateMany(req.params.id, req.body);
     sendSuccess(res, { siteItems });
   } catch (error) {
     next(error);
@@ -109,7 +109,7 @@ exports.CreateSiteOfficer = async (req, res, next) => {
 // delete and replace Site Officer
 exports.UpdateSiteOfficer = async (req, res, next) => {
   try {
-    var siteOfficers = await SiteOfficerDao.updateMany(req.body);
+    var siteOfficers = await SiteOfficerDao.updateMany(req.params.id, req.body);
     sendSuccess(res, { siteOfficers });
   } catch (error) {
     next(error);
