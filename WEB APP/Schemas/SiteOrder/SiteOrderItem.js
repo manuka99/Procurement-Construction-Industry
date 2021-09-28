@@ -1,6 +1,6 @@
 const { Schema, model, Types } = require("mongoose");
 
-const OrderItemSchema = new Schema(
+const SiteOrderItemSchema = new Schema(
   {
     siteOrderID: {
       type: Types.ObjectId,
@@ -32,5 +32,5 @@ const OrderItemSchema = new Schema(
   { timestamps: true }
 );
 
-const OrderItem = model("site_order_item", OrderItemSchema);
-module.exports = OrderItem;
+const SiteOrderItem = model("site_order_item", SiteOrderItemSchema);
+module.exports = SiteOrderItem;

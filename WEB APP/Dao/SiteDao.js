@@ -2,7 +2,7 @@ const Site = require("../Schemas/Site");
 const SiteOrder = require("../Schemas/SiteOrder/SiteOrder");
 
 exports.findAll = async () => {
-  const sites = await Site.find();
+  const sites = await Site.find({ parent: null });
   const newSites = [];
   for (let index = 0; index < sites.length; index++) {
     const site = sites[index];
