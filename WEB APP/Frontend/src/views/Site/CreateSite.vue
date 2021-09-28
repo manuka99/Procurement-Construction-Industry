@@ -15,7 +15,8 @@
     @hide="closeModal()"
   >
     <template v-slot:modal-title>
-      <h2>Create Site</h2>
+      <h2 v-if="model.parent != nul">Create Phase - (P::{{ model.parent }})</h2>
+      <h2 v-else>Create Site</h2>
     </template>
     <template v-slot:modal-footer>
       <!-- Emulate built in modal footer ok and cancel button actions -->
@@ -54,14 +55,14 @@
     <b-form class="w-100">
       <b-form-group
         id="input-group-2"
-        :label="model.type == 'phase' ? 'Phase Title: ' : 'Site Title: '"
+        :label="model.parent != null ? 'Phase Title: ' : 'Site Title: '"
         label-for="input-2"
       >
         <b-form-input
           id="input-2"
           v-model="model.name"
           :placeholder="
-            model.type == 'phase'
+            model.parent != null
               ? 'Type Phase title....'
               : 'Type Site title....'
           "
@@ -139,7 +140,11 @@
         ></b-form-input>
       </b-form-group>
 
-      <b-form-group id="input-group-3" label="Product Type" label-for="input-3">
+      <b-form-group
+        id="input-group-3"
+        :label="model.parent != null ? 'Phase Type: ' : 'Site Type: '"
+        label-for="input-3"
+      >
         <b-form-select
           id="input-3"
           v-model="model.type"
@@ -238,12 +243,12 @@ export default {
   watch: {
     parentSite(val) {
       this.model.parent = val;
-      this.model.type = "phase";
+      // this.model.type = "phase";
     }
   },
   mounted() {
     this.model.parent = this.parentSite;
-    if (this.model.parent) this.model.type = "phase";
+    // if (this.model.parent) this.model.type = "phase";
   },
   methods: {
     closeModal() {

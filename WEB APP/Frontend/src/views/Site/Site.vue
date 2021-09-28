@@ -65,22 +65,28 @@
       <template>
         <b-card no-body class="bg-default shadow">
           <b-card-header class="d-flex flex-column bg-transparent border-0">
-            <h3 class="mb-3 text-white">
-              Construction Site - {{ siteData.name }}
+            <h3 class="mb-0 text-white">
+              Construction {{ siteData.parent != null ? "Phase" : "Site" }} -
+              {{ siteData.name }}
             </h3>
-            <div class="d-flex align-items-center">
+            <h4
+              class="text-white d-flex align-items-center mb-0"
+              v-if="siteData.parent != null"
+            >
+              Parent Site:
+              <router-link
+                :to="'/sites/' + siteData.parent._id"
+                target="_blank"
+              >
+                <a class="btn btn-link ">
+                  {{ siteData.parent.name }}
+                </a>
+              </router-link>
+            </h4>
+            <div class="mt-3 d-flex align-items-center">
               <div class="mr-2">
                 <button class="btn btn-danger btn-sm" @click="deleteItem">
                   Delete this site
-                </button>
-              </div>
-              <div>
-                <button
-                  class="btn btn-success btn-sm"
-                  @click="isShow = true"
-                  v-if="siteData.type == 'phase'"
-                >
-                  Create New Phase
                 </button>
               </div>
             </div>
@@ -121,18 +127,19 @@
                     /></div
                 ></b-tab>
                 <b-tab title="Site Orders" lazy><div></div></b-tab>
-                <b-tab title="Site Phases" lazy><div></div></b-tab>
+                <b-tab title="Site Phases" lazy
+                  ><div>
+                    <SitePhase
+                      :key="sitePhasesKey"
+                      :siteInfo="siteData"
+                      @onUpdated="refreshData"
+                    /></div
+                ></b-tab>
               </b-tabs>
             </div>
           </b-card-body>
         </b-card>
       </template>
-      <CreateSite
-        :isShow="isShow"
-        @onClose="onClose"
-        :key="createSiteKey"
-        :parentSite="siteID"
-      />
     </b-container>
   </div>
 </template>
@@ -143,13 +150,15 @@ import CreateSite from "./CreateSite";
 import SiteInfo from "./SiteInfo";
 import SiteBudget from "./SiteBudget";
 import SiteOfficers from "./SiteOfficers";
+import SitePhase from "./SitePhase";
 export default {
   name: "Site",
   components: {
     CreateSite,
     SiteInfo,
     SiteBudget,
-    SiteOfficers
+    SiteOfficers,
+    SitePhase
   },
   data() {
     return {
@@ -159,15 +168,20 @@ export default {
       createSiteKey: new Date().valueOf().toString() + 1000,
       siteInfoKey: new Date().valueOf().toString() + 2000,
       siteBudgetKey: new Date().valueOf().toString() + 3000,
-      siteOfficersKey: new Date().valueOf().toString() + 4000
+      siteOfficersKey: new Date().valueOf().toString() + 4000,
+      sitePhasesKey: new Date().valueOf().toString() + 4000
     };
   },
   mounted() {
     this.siteID = this.$route.params.id;
     this.initFn();
   },
+  watch: {
+    "$route.params": "initFn"
+  },
   methods: {
     initFn() {
+      this.siteID = this.$route.params.id;
       GetSite(this.siteID)
         .then(res => {
           console.log(res.data.data);
@@ -188,6 +202,12 @@ export default {
             variant: "success"
           };
           this.$store.dispatch("notification/setNotify", payloadNotify);
+          if (this.siteData.parent)
+            this.$router.push({
+              name: "Site",
+              params: { id: this.siteData.parent._id }
+            });
+          else this.$router.push({ name: "Sites", replace: true });
         })
         .catch(e => console.log(e));
     },
@@ -198,6 +218,12 @@ export default {
       this.siteInfoKey = new Date().valueOf().toString() + 2000;
       this.siteBudgetKey = new Date().valueOf().toString() + 3000;
       this.siteOfficersKey = new Date().valueOf().toString() + 4000;
+      this.sitePhasesKey = new Date().valueOf().toString() + 4000;
+    },
+    onClose() {
+      this.isShow = false;
+      this.createProductKey = new Date().valueOf();
+      this.initFn();
     },
     getAvatarClass() {
       const val = Math.floor(Math.random() * 4 + 1);

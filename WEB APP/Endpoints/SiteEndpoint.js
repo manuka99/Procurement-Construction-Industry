@@ -25,7 +25,6 @@ exports.GetSite = async (req, res, next) => {
 // create site
 exports.CreateSite = async (req, res, next) => {
   try {
-    if (req.body.type != "phase") req.body.parent = undefined;
     var site = await SiteDao.create(req.body);
     sendSuccess(res, { site });
   } catch (error) {
