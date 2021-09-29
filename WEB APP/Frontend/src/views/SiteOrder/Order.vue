@@ -115,19 +115,14 @@
 
 <script>
 import { GetSiteOrder, DeleteSiteOrder } from "@/services/site.service";
-import CreateSite from "./CreateSite";
 import SiteOrderInfo from "./SiteOrderInfo";
 import SiteOrderItem from "./SiteOrderItem";
-import SiteOfficers from "./SiteOfficers";
-import SitePhase from "./SitePhase";
+
 export default {
   name: "Site",
   components: {
-    CreateSite,
     SiteOrderInfo,
-    SiteOrderItem,
-    SiteOfficers,
-    SitePhase
+    SiteOrderItem
   },
   data() {
     return {

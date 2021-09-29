@@ -32,7 +32,7 @@ exports.update = async (
 ) => {
   const siteOrder = await SiteOrder.updateOne(
     { _id },
-    { status, description, statusDescription }
+    { status, name, description, statusDescription }
   );
   return siteOrder;
 };
