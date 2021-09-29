@@ -11,7 +11,10 @@
         <b-col cols="12" sm="6" class="pb-4">
           <h4 class="mt-2 text-white">
             Order Site -
-            <router-link :to="siteOrderInfo.site._id" class="text-info">
+            <router-link
+              :to="'/sites/' + siteOrderInfo.site._id"
+              class="text-info"
+            >
               {{ siteOrderInfo.site.name }}
             </router-link>
           </h4>

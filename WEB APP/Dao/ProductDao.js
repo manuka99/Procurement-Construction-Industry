@@ -1,8 +1,15 @@
 const Product = require("../Schemas/Product");
-const SupplierOrderItem = require("../Schemas/SupplierOrder/SupplierOrderItem");
+const SupplierOrder = require("../Schemas/SupplierOrder/SupplierOrder");
 
 exports.findAll = async () => {
   const products = await Product.find()
+    .populate("supplier")
+    .populate("productType");
+  return products;
+};
+
+exports.findAllFilter = async (filter) => {
+  const products = await Product.find(filter)
     .populate("supplier")
     .populate("productType");
   return products;
@@ -21,9 +28,9 @@ exports.create = async (data) => {
 };
 
 exports.delete = async (_id) => {
-  var productCount = await SupplierOrderItem.count({ product: _id });
+  var productCount = await SupplierOrder.count({ product: _id });
   if (productCount && productCount > 0)
-    throw new Error("Cannot delete a product which is used by suppliers");
+    throw new Error("Cannot delete a product which is used by supplier orders");
   const product = await Product.deleteOne({ _id });
   return product;
 };

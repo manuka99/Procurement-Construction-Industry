@@ -15,3 +15,7 @@ export const DeleteProduct = id => {
 export const GetProduct = id => {
   return Api().get(`/auth/products/${id}`);
 };
+
+export const GetProductsForType = type => {
+  return Api().get(`/auth/products?type=${type}`);
+};

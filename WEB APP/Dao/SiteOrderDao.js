@@ -1,7 +1,7 @@
 const SiteOrder = require("../Schemas/SiteOrder/SiteOrder");
 const SiteOrderItem = require("../Schemas/SiteOrder/SiteOrderItem");
 const SupplierOrder = require("../Schemas/SupplierOrder/SupplierOrder");
-const SupplierOrderItem = require("../Schemas/SupplierOrder/SupplierOrderItem");
+// const SupplierOrderItem = require("../Schemas/SupplierOrder/SupplierOrderItem");
 
 exports.findAll = async () => {
   const siteOrders = await SiteOrder.find().populate("user").populate("site");
@@ -66,18 +66,19 @@ exports.delete = async (id) => {
         throw new Error(
           "Cannot delete a order, where its supplier order is already proccessed"
         );
-      // get supplier order items
-      const supplierOrderItems = await SupplierOrderItem.find({
-        supplierOrderID: supplierOrder._id,
-      });
-      for (let index3 = 0; index3 < supplierOrderItems.length; index3++) {
-        const supplierOrderItem = supplierOrderItems[index3];
-        // validate supplier order item
-        if (supplierOrderItem.status != "Pending")
-          throw new Error(
-            "Cannot delete a order, where its supplier order item is already proccessed"
-          );
-      }
+
+      // // get supplier order items
+      // const supplierOrderItems = await SupplierOrderItem.find({
+      //   supplierOrderID: supplierOrder._id,
+      // });
+      // for (let index3 = 0; index3 < supplierOrderItems.length; index3++) {
+      //   const supplierOrderItem = supplierOrderItems[index3];
+      //   // validate supplier order item
+      //   if (supplierOrderItem.status != "Pending")
+      //     throw new Error(
+      //       "Cannot delete a order, where its supplier order item is already proccessed"
+      //     );
+      // }
     }
   }
 
@@ -89,17 +90,17 @@ exports.delete = async (id) => {
 
   for (let index = 0; index < _siteOrderItems.length; index++) {
     const _siteOrderItem = _siteOrderItems[index];
-    const _supplierOrders = await SupplierOrder.find({
-      siteOrderItemID: _siteOrderItem._id,
-    });
+    // const _supplierOrders = await SupplierOrder.find({
+    //   siteOrderItemID: _siteOrderItem._id,
+    // });
     // get supplier orders
-    for (let index2 = 0; index2 < _supplierOrders.length; index2++) {
-      const _supplierOrder = _supplierOrders[index2];
-      // get supplier order items
-      await SupplierOrderItem.deleteMany({
-        supplierOrderID: _supplierOrder._id,
-      });
-    }
+    // for (let index2 = 0; index2 < _supplierOrders.length; index2++) {
+    //   const _supplierOrder = _supplierOrders[index2];
+    //   // get supplier order items
+    //   await SupplierOrderItem.deleteMany({
+    //     supplierOrderID: _supplierOrder._id,
+    //   });
+    // }
     // delete Supplier Order
     await SupplierOrder.deleteMany({
       siteOrderItemID: _siteOrderItem._id,

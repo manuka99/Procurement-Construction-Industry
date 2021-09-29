@@ -4,7 +4,9 @@ const ProductDao = require("../Dao/ProductDao");
 // find all
 exports.GetAll = async (req, res, next) => {
   try {
-    var products = await ProductDao.findAll();
+    var products = [];
+    if (req.search) products = await ProductDao.findAllFilter(req.search);
+    else products = await ProductDao.findAll();
     sendSuccess(res, { products });
   } catch (error) {
     next(error);

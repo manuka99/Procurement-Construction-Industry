@@ -3,6 +3,7 @@ import Api from "./api";
 export const GetALLSuppliers = () => {
   return Api().get(`/auth/suppliers`);
 };
+
 export const GetALLSuppliersWithProducts = () => {
   return Api().get(`/auth/suppliers/products`);
 };

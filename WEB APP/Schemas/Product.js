@@ -16,12 +16,19 @@ const ProductSchema = new Schema(
       type: Number,
       required: true,
     },
+    price: {
+      type: Number,
+      required: true,
+    },
     isAvailable: {
       type: Boolean,
       default: true,
     },
+    brand: {
+      type: String,
+      default: true,
+    },
     threshold: Number,
-    brand: String,
     description: String,
   },
   { timestamps: true }

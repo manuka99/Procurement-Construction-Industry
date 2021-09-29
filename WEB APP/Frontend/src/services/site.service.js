@@ -69,6 +69,7 @@ export const CreateSiteOrder = data => {
 export const UpdateSiteOrder = (id, data) => {
   return Api().put(`/auth/site-orders/${id}`, data);
 };
+
 // ------ Site orders items
 
 export const GetSiteOrderItems = id => {
@@ -85,4 +86,22 @@ export const DeleteSiteOrderItem = id => {
 
 export const UpdateSiteOrderItem = (id, data) => {
   return Api().put(`/auth/site-order-items/${id}`, data);
+};
+
+// ------ Supplier orders
+
+export const GetAllSupplierOrdersBySiteOrderItem = id => {
+  return Api().get(`/auth/site-order-item-supplier-orders/:id${id}`);
+};
+
+export const CreateSupplierOrder = data => {
+  return Api().post(`/auth/supplier-orders`, data);
+};
+
+export const DeleteSupplierOrder = id => {
+  return Api().delete(`/auth/supplier-orders/${id}`);
+};
+
+export const UpdateSupplierOrder = (id, data) => {
+  return Api().put(`/auth/supplier-orders/${id}`, data);
 };

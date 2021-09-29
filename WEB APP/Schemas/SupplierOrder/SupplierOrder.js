@@ -2,11 +2,6 @@ const { Schema, model, Types } = require("mongoose");
 
 const SupplierOrderSchema = new Schema(
   {
-    siteOrderID: {
-      type: Types.ObjectId,
-      ref: "site_order",
-      required: true,
-    },
     siteOrderItemID: [
       {
         type: Types.ObjectId,
@@ -19,22 +14,42 @@ const SupplierOrderSchema = new Schema(
       ref: "user",
       required: true,
     },
-    site: {
+    product: {
       type: Types.ObjectId,
-      ref: "site",
+      ref: "product",
       required: true,
     },
-    supplier: {
-      type: Types.ObjectId,
-      ref: "supplier",
+    quantity: {
+      type: Number,
+      required: true,
+    },
+    ppItem: {
+      type: Number,
+      required: true,
+    },
+    requiredDate: {
+      type: Date,
+      required: true,
+    },
+    deliveryLocation: {
+      type: String,
       required: true,
     },
     status: {
       type: String,
-      enum: ["Pending", "Approved", "Partialy Approved", "Declined", "Placed"],
+      enum: [
+        "Pending",
+        "Approved",
+        "Partialy Approved",
+        "Declined",
+        "Placed",
+        "Packed",
+        "Shipped",
+        "Delivered",
+        "Returned",
+      ],
       default: "Pending",
     },
-    deliveryLocation: String,
     description: String,
     statusDescription: String,
   },
