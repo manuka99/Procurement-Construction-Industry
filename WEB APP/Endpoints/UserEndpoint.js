@@ -1,7 +1,10 @@
 const { sendSuccess, sendError } = require("../Common/util");
 const { UserEnum } = require("../Models/UserModel");
 const ValidationError = require("../Common/ValidationError");
+const AdminEndpoint = require("../Endpoints/AdminEndpoint");
 const SupplierEndpoint = require("../Endpoints/SupplierEndpoint");
+const SiteManagerEndpoint = require("../Endpoints/SiteManagerEndpoint");
+const AccountantEndpoint = require("../Endpoints/AccountantEndpoint");
 const UserDao = require("../Dao/UserDao");
 
 //to validate token
@@ -22,13 +25,13 @@ exports.Registration = (req, res, next) => {
   const { role } = req.body;
   switch (role) {
     case UserEnum.ADMIN:
-      AdminEndpoint.AdminRegistration(req, res, next);
+      AdminEndpoint.Registration(req, res, next);
       break;
     case UserEnum.SITEMANAGER:
-      EditorEndpoint.EditorRegistration(req, res, next);
+      SiteManagerEndpoint.Registration(req, res, next);
       break;
     case UserEnum.ACCOUNTANT:
-      EditorEndpoint.EditorRegistration(req, res, next);
+      AccountantEndpoint.Registration(req, res, next);
       break;
     case UserEnum.MANAGER:
       ReviewerEndpoint.ReviewerRegistration(req, res, next);

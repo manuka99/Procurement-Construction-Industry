@@ -23,7 +23,7 @@ exports.TokenValidator = async (req, res, next) => {
     req.body.user = user._id;
     req.user_jwt = token;
   } catch (error) {
-    consola.error(`TokenValidator Middleware: ${error.message}`);
+    // consola.error(`TokenValidator Middleware: ${error.message}`);
   } finally {
     next();
   }
