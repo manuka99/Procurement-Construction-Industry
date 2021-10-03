@@ -44,7 +44,7 @@ exports.DeleteSupplier = async (req, res, next) => {
 exports.Registration = async (req, res, next) => {
   try {
     // validations
-    const SupplierData = lodash.pick(req.body, [
+    const supplierData = lodash.pick(req.body, [
       "firstName",
       "lastName",
       "phone",
@@ -57,7 +57,7 @@ exports.Registration = async (req, res, next) => {
     ]);
 
     // register Supplier
-    var supplier = await SupplierDao.createNewSupplier(SupplierData);
+    var supplier = await SupplierDao.createNewSupplier(supplierData);
 
     sendSuccess(res, { supplier, token: supplier.getSignedJwtToken() });
   } catch (error) {
@@ -68,15 +68,14 @@ exports.Registration = async (req, res, next) => {
 exports.UpdateSensitive = async (req, res, next) => {
   try {
     // validations
-    const SupplierData = lodash.pick(req.body, [
+    const supplierData = lodash.pick(req.body, [
       "isApproved",
       "approvalReason",
       "paymentInfo",
     ]);
 
     // update Supplier
-    console.log(SupplierData);
-    var supplier = await SupplierDao.Update(req.params.id, SupplierData);
+    var supplier = await SupplierDao.Update(req.params.id, supplierData);
     sendSuccess(res, { supplier });
   } catch (error) {
     next(error);
@@ -87,7 +86,7 @@ exports.UpdateSensitive = async (req, res, next) => {
 exports.UpdateSupplier = async (req, res, next) => {
   try {
     // validations
-    const SupplierData = lodash.pick(req.body, [
+    const supplierData = lodash.pick(req.body, [
       "firstName",
       "lastName",
       "phone",
@@ -99,7 +98,7 @@ exports.UpdateSupplier = async (req, res, next) => {
     ]);
 
     // update Supplier
-    var supplier = await SupplierDao.Update(req.user._id, SupplierData);
+    var supplier = await SupplierDao.Update(req.user._id, supplierData);
     sendSuccess(res, { supplier, token: supplier.getSignedJwtToken() });
   } catch (error) {
     next(error);
