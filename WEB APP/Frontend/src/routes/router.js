@@ -47,10 +47,40 @@ router.beforeEach((to, from, next) => {
         "Profile",
         "Types",
         "Suppliers",
-        "Sites"
+        "MySites",
+        "Tables",
+        "Types",
+        "Type",
+        "Suppliers",
+        "Supplier",
+        "Products",
+        "Product",
+        "Sites",
+        "Site",
+        "Order"
       ]);
       break;
     case "SUPPLIER":
+      protectedAccessRoutes = [
+        ...protectedAccessRoutes,
+        "Dashboard",
+        "Profile",
+        "Types",
+        "Suppliers",
+        "MySites",
+        "Tables",
+        "Types",
+        "Type",
+        "Suppliers",
+        "Supplier",
+        "Products",
+        "Product",
+        "Sites",
+        "Site",
+        "Order"
+      ];
+      break;
+    case "SITEMANAGER":
       protectedAccessRoutes = [
         ...protectedAccessRoutes,
         "Dashboard",

@@ -1,4 +1,7 @@
+const ValidationError = require("../Common/ValidationError");
 const Product = require("../Schemas/Product");
+const SiteItem = require("../Schemas/SiteItem");
+const SiteOrderItem = require("../Schemas/SiteOrder/SiteOrderItem");
 const SupplierOrder = require("../Schemas/SupplierOrder/SupplierOrder");
 const SupplierOrderEvidence = require("../Schemas/SupplierOrder/SupplierOrderEvidences");
 
@@ -10,6 +13,49 @@ exports.findAllBySiteOrderItem = async (siteOrderItemID) => {
 };
 
 exports.create = async (data) => {
+  // validate order budget
+  const QTY = data.quantity;
+  //get site order item
+  const siteOrderItem = await SiteOrderItem.findById(
+    data.siteOrderItemID
+  ).populate("siteOrderID");
+
+  const supplierOrders = await SupplierOrder.find({
+    siteOrderItemID: data.siteOrderItemID,
+  });
+  const s_orderQTY = supplierOrders.reduce((t, c) => t + c.quantity, 0);
+
+  // check if the budget matches
+  const siteItems = await SiteItem.find({
+    site: siteOrderItem.siteOrderID.site,
+    productType: siteOrderItem.productType,
+  });
+  const totalAllocatedBudget = siteItems.reduce((t, c) => t + c.quantity, 0);
+
+  console.log(totalAllocatedBudget);
+
+  if (
+    parseInt(totalAllocatedBudget) == 0 ||
+    parseInt(s_orderQTY) + parseInt(QTY) > parseInt(totalAllocatedBudget)
+  )
+    throw new ValidationError(`Cannot place supplier order as budget exceeded`);
+
+  // check if request order item and supplier order matches
+  // check if quantity is more that order item QTY
+  if (parseInt(QTY) > parseInt(siteOrderItem.quantity))
+    throw new ValidationError(
+      `Supplier Order quantity exceeds requested item quantity ( ${QTY} vs ${siteOrderItem.quantity})`
+    );
+
+  // check if quantity is more that order item QTY ordered
+  if (parseInt(QTY) + parseInt(s_orderQTY) > parseInt(siteOrderItem.quantity))
+    throw new ValidationError(
+      `Supplier Order quantity exceeds as the item was ordered multiple times (you can only order the remaining ${
+        siteOrderItem.quantity - s_orderQTY
+      } items.)`
+    );
+
+  // save data
   delete data.status;
   const product = await Product.findById(data.product);
   data.ppItem = product.price;

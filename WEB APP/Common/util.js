@@ -21,9 +21,9 @@ const FormatValidationError = (err) => {
           if (error.param in params) params[error.param].push(error.msg);
           else params[error.param] = new Array(error.msg);
         }
-        return { msg: message, params };
+        return { message, params };
       }
-      return { msg: message };
+      return { message };
     }
   } catch (error) {
     Consola.error("FormatValidationError: ", err);

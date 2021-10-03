@@ -86,7 +86,7 @@
             <template #empty>
               <div class="d-flex text-center justify-content-center">
                 <span>
-                  There are no suppliers to show, start adding new suppliers
+                  There are no sites to show, create your first construction site
                 </span>
               </div>
             </template>

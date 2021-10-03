@@ -601,6 +601,7 @@ export default {
           if (err.response && err.response.data && err.response.data.data)
             this.apiError.message = err.response.data.data.message;
           else this.apiError.message = err.message || "Unexpected error";
+          this.initFn();
         })
         .finally(() => (data.loading = false));
     },

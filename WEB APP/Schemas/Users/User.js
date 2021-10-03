@@ -1,4 +1,4 @@
-const { Schema, model } = require("mongoose");
+const { Schema, model, Types } = require("mongoose");
 const crypto = require("crypto");
 const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
@@ -49,18 +49,29 @@ const UserSchema = new Schema(
       type: String,
       required: false,
     },
-
     two_factor_recovery_codes: {
       type: String,
       required: false,
     },
-
     role: {
       type: String,
       required: true,
       enum: ["ADMIN", "SITEMANAGER", "ACCOUNTANT", "MANAGER", "SUPPLIER"],
     },
-
+    isApproved: {
+      type: Boolean,
+      default: false,
+    },
+    approvalReason: {
+      type: String,
+      default:
+        "All new registrations must be approved by the management, our team will get in touch with you within 3 working days.",
+    },
+    approvedBy: {
+      type: Types.ObjectId,
+      required: false,
+      ref: "user",
+    },
     email_verify_token: { type: String, select: false },
     email_verified_at: Date,
     password_recovery_token: { type: String, select: false },

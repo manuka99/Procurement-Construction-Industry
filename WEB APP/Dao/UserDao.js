@@ -1,7 +1,7 @@
 const User = require("../Schemas/Users/User");
 
 exports.AllSiteManagers = async () => {
-  var users = await User.find({ role: "SUPPLIER" }); //change to SITEMANAGER
+  var users = await User.find({ role: "SITEMANAGER" }); //change to SITEMANAGER
   return users;
 };
 

@@ -1,4 +1,5 @@
 const Site = require("../Schemas/Site");
+const SiteOfficer = require("../Schemas/SiteOfficer");
 const SiteOrder = require("../Schemas/SiteOrder/SiteOrder");
 
 exports.findAll = async () => {
@@ -10,6 +11,22 @@ exports.findAll = async () => {
     newSites.push({ ...site._doc, phases });
   }
   return newSites;
+};
+
+exports.findManagersSites = async (sm_id) => {
+  var sites = await SiteOfficer.find({ officer: sm_id })
+    .select("site")
+    .populate("site");
+  if (sites.length > 0) {
+    sites = sites.map((site_of) => site_of.site);
+    const newSites = [];
+    for (let index = 0; index < sites.length; index++) {
+      const site = sites[index];
+      const phases = await Site.find({ parent: site._id });
+      newSites.push({ ...site._doc, phases });
+    }
+    return newSites;
+  }
 };
 
 exports.findByID = async (id) => {

@@ -1,13 +1,23 @@
+const AccessForbiddenError = require("../Common/AccessForbiddenError");
 const { sendSuccess } = require("../Common/util");
 const SiteDao = require("../Dao/SiteDao");
 const SiteItemDao = require("../Dao/SiteItemDao");
 const SiteOfficerDao = require("../Dao/SiteOfficerDao");
+const { UserEnum } = require("../Models/UserModel");
 
 // find all
 exports.GetAllSites = async (req, res, next) => {
   try {
-    var sites = await SiteDao.findAll();
-    sendSuccess(res, { sites });
+    if (req.user) {
+      var sites = [];
+      if (req.user.role == UserEnum.ADMIN) sites = await SiteDao.findAll();
+      else if (req.user.role == UserEnum.SITEMANAGER)
+        sites = await SiteDao.findManagersSites(req.user._id);
+      return sendSuccess(res, { sites });
+    }
+    throw new AccessForbiddenError(
+      "You do not have access to view the requested content"
+    );
   } catch (error) {
     next(error);
   }
