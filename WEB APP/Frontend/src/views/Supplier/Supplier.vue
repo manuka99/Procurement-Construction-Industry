@@ -108,6 +108,62 @@
               <b-card-text>
                 {{ supplier.description }}
               </b-card-text>
+              <b-card-text>
+                <b-form-group
+                  id="input-group-3"
+                  label="User status"
+                  label-for="input-3"
+                  class="text-primary font-weight-bold"
+                >
+                  <b-form-select
+                    id="input-3"
+                    v-model="supplier.isApproved"
+                    :options="status"
+                    required
+                  ></b-form-select>
+                </b-form-group>
+              </b-card-text>
+              <b-card-text>
+                <b-form-group
+                  id="input-group-2"
+                  label="Approval Reason:"
+                  label-for="input-2"
+                  class="text-primary font-weight-bold"
+                >
+                  <b-form-textarea
+                    id="textarea"
+                    v-model="supplier.approvalReason"
+                    placeholder="Type approval reason:...."
+                    rows="3"
+                    max-rows="6"
+                  ></b-form-textarea>
+                </b-form-group>
+              </b-card-text>
+              <b-card-text>
+                <b-form-group
+                  id="input-group-2"
+                  label=" Payment Info:"
+                  label-for="input-2"
+                  class="text-primary font-weight-bold"
+                >
+                  <b-form-textarea
+                    id="textarea"
+                    v-model="supplier.paymentInfo"
+                    placeholder="Type payment info:...."
+                    rows="3"
+                    max-rows="6"
+                  ></b-form-textarea>
+                </b-form-group>
+              </b-card-text>
+              <b-card-text>
+                <base-button
+                  class="btn btn-primary"
+                  @click="submitForm"
+                  :loading="loading"
+                >
+                  Save changes
+                </base-button>
+              </b-card-text>
             </b-card>
             <h3 class="mb-3 text-white">Supplier's Products</h3>
             <div>
@@ -232,7 +288,11 @@
 </template>
 
 <script>
-import { GetSupplier, DeleteSupplier } from "@/services/supplier.service";
+import {
+  GetSupplier,
+  DeleteSupplier,
+  UpdateSupplier
+} from "@/services/supplier.service";
 import CreateProduct from "@/views/Product/CreateProduct";
 import { DeleteProduct } from "@/services/product.service";
 
@@ -255,7 +315,12 @@ export default {
         { key: "delete", label: "Delete" }
       ],
       items: [],
+      status: [
+        { text: "Approved", value: true },
+        { text: "Not Approved", value: false }
+      ],
       isShow: false,
+      loading: false,
       supplier: {},
       createProductKey: new Date().valueOf().toString()
     };
@@ -295,6 +360,28 @@ export default {
         default:
           break;
       }
+    },
+    submitForm() {
+      this.loading = true;
+      UpdateSupplier(this.supplier._id, this.supplier)
+        .then(res => {
+          console.log(res);
+          var payloadNotify = {
+            isToast: true,
+            title: "SUCCESS! Supplier Was Updated",
+            content: "All data was saved successfully",
+            variant: "success"
+          };
+          this.$store.dispatch("notification/setNotify", payloadNotify);
+          this.initFn();
+        })
+        .catch(err => {
+          this.apiError.status = true;
+          if (err.response && err.response.data && err.response.data.data)
+            this.apiError.message = err.response.data.data.message;
+          else this.apiError.message = err.message || "Unexpected error";
+        })
+        .finally(() => (this.loading = false));
     },
     deleteItem(id) {
       DeleteProduct(id)

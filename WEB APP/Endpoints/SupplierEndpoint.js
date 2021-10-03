@@ -65,6 +65,24 @@ exports.Registration = async (req, res, next) => {
   }
 };
 
+exports.UpdateSensitive = async (req, res, next) => {
+  try {
+    // validations
+    const SupplierData = lodash.pick(req.body, [
+      "isApproved",
+      "approvalReason",
+      "paymentInfo",
+    ]);
+
+    // update Supplier
+    console.log(SupplierData);
+    var supplier = await SupplierDao.Update(req.params.id, SupplierData);
+    sendSuccess(res, { supplier });
+  } catch (error) {
+    next(error);
+  }
+};
+
 // to update Supplier
 exports.UpdateSupplier = async (req, res, next) => {
   try {

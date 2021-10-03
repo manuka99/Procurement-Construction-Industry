@@ -15,3 +15,7 @@ export const GetSupplier = id => {
 export const DeleteSupplier = id => {
   return Api().delete(`/auth/suppliers/${id}`);
 };
+
+export const UpdateSupplier = (id, data) => {
+  return Api().put(`/auth/suppliers/${id}`, data);
+};
