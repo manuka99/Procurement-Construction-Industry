@@ -105,3 +105,11 @@ export const DeleteSupplierOrder = id => {
 export const UpdateSupplierOrder = (id, data) => {
   return Api().put(`/auth/supplier-orders/${id}`, data);
 };
+
+export const CreateSupplierOrderEvidences = (id, data) => {
+  return Api().post(`/auth/supplier-orders-evidences/${id}`, data, {
+    headers: {
+      "Content-Type": "multipart/form-data"
+    }
+  });
+};

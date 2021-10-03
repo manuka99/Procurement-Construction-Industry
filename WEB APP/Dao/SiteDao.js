@@ -30,7 +30,7 @@ exports.create = async (data) => {
     );
   }
 
-  if (parent.type != "phase")
+  if (parent && parent.type != "phase")
     throw new Error("Parent site must be of type 'PHASE' to create phases.");
   const site = await Site.create(data);
   return site;

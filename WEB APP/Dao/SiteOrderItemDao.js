@@ -19,7 +19,8 @@ exports.findAllBySiteOrder = async (siteOrderID) => {
         populate: {
           path: "supplier",
         },
-      });
+      })
+      .populate("evidences");
     newItems.push({ ...siteOrderItem._doc, supplierOrders });
   }
   return newItems;

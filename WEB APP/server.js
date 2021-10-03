@@ -10,6 +10,8 @@ const startApp = async () => {
     await connect();
     console.log("Connected to database");
 
+    app.use("/uploads", express.static(path.join(__dirname, "/uploads")));
+
     // serve static assests
     if (process.env.NODE_ENV === "production") {
       app.use(express.static("Frontend/build"));

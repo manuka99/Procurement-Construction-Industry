@@ -10,7 +10,10 @@ exports.findAll = async () => {
 
 exports.findAllFilter = async (filter) => {
   const products = await Product.find(filter)
-    .populate("supplier")
+    .populate({
+      path: "supplier",
+      // match: { isApproved: true },
+    })
     .populate("productType");
   return products;
 };

@@ -166,6 +166,12 @@
               ></b-icon>
             </template>
 
+            <template #cell(price)="data">
+              <span class="text-white"
+                >LKR {{ data.value.toLocaleString() }}</span
+              >
+            </template>
+
             <template #cell(view)="data">
               <router-link :to="'/products/' + data.item._id">
                 <b-icon variant="white" icon="eye" font-scale="1.8"></b-icon>
@@ -198,6 +204,7 @@ export default {
         { key: "productType", label: "Type" },
         { key: "supplier", label: "Supplier" },
         { key: "brand", label: "Product Brand" },
+        { key: "price", label: "Product Price" },
         { key: "metric", label: "Measured Metrics" },
         { key: "quantity", label: "QTY" },
         { key: "isAvailable", label: "Availability" },

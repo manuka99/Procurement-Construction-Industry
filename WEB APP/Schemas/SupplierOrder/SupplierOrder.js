@@ -52,6 +52,13 @@ const SupplierOrderSchema = new Schema(
     },
     description: String,
     statusDescription: String,
+    evidences: [
+      {
+        type: Types.ObjectId,
+        ref: "supplier_order_evidence",
+        required: true,
+      },
+    ],
   },
   { timestamps: true }
 );

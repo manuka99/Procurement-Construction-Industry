@@ -17,5 +17,5 @@ export const GetProduct = id => {
 };
 
 export const GetProductsForType = type => {
-  return Api().get(`/auth/products?type=${type}`);
+  return Api().get(`/auth/products?productType=${type}`);
 };

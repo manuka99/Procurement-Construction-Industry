@@ -230,7 +230,7 @@
                           v-for="supplierOrder in item.supplierOrders"
                           :key="supplierOrder._id"
                         >
-                          <b-card no-body class="mb-3">
+                          <b-card no-body class="mb-3 ">
                             <b-card-header
                               header-tag="header"
                               class="p-0"
@@ -240,7 +240,10 @@
                                 block
                                 v-b-toggle="supplierOrder._id"
                                 variant="dark"
-                                >ORDER #{{ supplierOrder._id }}</b-button
+                                class="p-3"
+                                >SUPPLIER ORDER #{{
+                                  supplierOrder._id
+                                }}</b-button
                               >
                             </b-card-header>
                             <b-collapse
@@ -249,86 +252,160 @@
                               accordion="my-accordion2"
                               role="tabpanel"
                             >
-                              <b-card-body>
-                                <button
-                                  class="btn btn-danger btn-sm mb-2"
-                                  @click="
-                                    deleteSupplierOrder(supplierOrder._id)
-                                  "
-                                >
-                                  Delete this supplier order
-                                </button>
-                                <h3>
-                                  Order Status:
-                                  <span class="text-primary">{{
-                                    supplierOrder.status
-                                  }}</span>
-                                </h3>
-                                <h3>
-                                  User:
-                                  <span class="text-success">{{
-                                    supplierOrder.user.firstName +
-                                      " " +
-                                      supplierOrder.user.lastName
-                                  }}</span>
-                                </h3>
-                                <h3>
-                                  Product:
-                                  <router-link
-                                    target="_blank"
-                                    :to="
-                                      '/products/' + supplierOrder.product._id
-                                    "
-                                  >
-                                    <span class="text-success">{{
-                                      supplierOrder.product.supplier.firstName +
-                                        " " +
-                                        supplierOrder.product.supplier
-                                          .lastName +
-                                        " " +
-                                        "(" +
-                                        supplierOrder.product.brand +
-                                        ")"
-                                    }}</span>
-                                  </router-link>
-                                </h3>
-                                <h3>
-                                  Required Date:
-                                  <span class="text-success">{{
-                                    supplierOrder.requiredDate.split("T")[0]
-                                  }}</span>
-                                </h3>
-                                <h3>
-                                  Quantity:
-                                  <span class="text-info">{{
-                                    supplierOrder.quantity
-                                  }}</span>
-                                </h3>
-                                <h3>
-                                  Price Per Item:
-                                  <span class="text-info"
-                                    >LKR
-                                    {{
-                                      supplierOrder.ppItem.toLocaleString()
-                                    }}</span
-                                  >
-                                </h3>
-                                <h3>
-                                  Total Price:
-                                  <span class="text-danger"
-                                    >LKR
-                                    {{
-                                      (
-                                        supplierOrder.ppItem *
+                              <b-card-body class="py-4 px-0 m-0 border">
+                                <b-row class="px-3">
+                                  <b-col cols="12" lg="4">
+                                    <button
+                                      class="btn btn-danger btn-sm mb-2"
+                                      @click="
+                                        deleteSupplierOrder(supplierOrder._id)
+                                      "
+                                    >
+                                      Delete this supplier order
+                                    </button>
+                                    <h4>
+                                      Order Status:
+                                      <span class="text-primary">{{
+                                        supplierOrder.status
+                                      }}</span>
+                                    </h4>
+                                    <h4>
+                                      User:
+                                      <span class="text-success">{{
+                                        supplierOrder.user.firstName +
+                                          " " +
+                                          supplierOrder.user.lastName
+                                      }}</span>
+                                    </h4>
+                                    <h4>
+                                      Product:
+                                      <router-link
+                                        target="_blank"
+                                        :to="
+                                          '/products/' +
+                                            supplierOrder.product._id
+                                        "
+                                      >
+                                        <span class="text-success">{{
+                                          supplierOrder.product.supplier
+                                            .firstName +
+                                            " " +
+                                            supplierOrder.product.supplier
+                                              .lastName +
+                                            " " +
+                                            "(" +
+                                            supplierOrder.product.brand +
+                                            ")"
+                                        }}</span>
+                                      </router-link>
+                                    </h4>
+                                    <h4>
+                                      Required Date:
+                                      <span class="text-success">{{
+                                        supplierOrder.requiredDate.split("T")[0]
+                                      }}</span>
+                                    </h4>
+                                    <h4>
+                                      Quantity:
+                                      <span class="text-info">{{
                                         supplierOrder.quantity
-                                      ).toLocaleString()
-                                    }}</span
-                                  >
-                                </h3>
-                              </b-card-body></b-collapse
-                            ></b-card
-                          ></b-col
-                        >
+                                      }}</span>
+                                    </h4>
+                                    <h4>
+                                      Price Per Item:
+                                      <span class="text-info"
+                                        >LKR
+                                        {{
+                                          supplierOrder.ppItem.toLocaleString()
+                                        }}</span
+                                      >
+                                    </h4>
+                                    <h4>
+                                      Total Price:
+                                      <span class="text-danger"
+                                        >LKR
+                                        {{
+                                          (
+                                            supplierOrder.ppItem *
+                                            supplierOrder.quantity
+                                          ).toLocaleString()
+                                        }}</span
+                                      >
+                                    </h4>
+                                  </b-col>
+                                  <b-col cols="12" lg="8">
+                                    <button
+                                      class="btn btn-warning btn my-3 mt-lg-0"
+                                      @click="
+                                        createNewEvidence(supplierOrder._id)
+                                      "
+                                    >
+                                      Create an evidence
+                                    </button>
+                                    <div class="accordion" role="tablist3">
+                                      <b-col
+                                        cols="12"
+                                        v-for="evidence in supplierOrder.evidences"
+                                        :key="evidence._id"
+                                        class="p-0"
+                                      >
+                                        <b-card no-body class="mb-3 ">
+                                          <b-card-header
+                                            header-tag="header"
+                                            class="p-0"
+                                            role="tab"
+                                          >
+                                            <b-button
+                                              block
+                                              v-b-toggle="evidence._id"
+                                              variant="primary"
+                                            >
+                                              {{ evidence.title }} ({{
+                                                evidence.createdAt.split(
+                                                  "T"
+                                                )[0]
+                                              }})</b-button
+                                            >
+                                          </b-card-header>
+                                          <b-collapse
+                                            :id="evidence._id"
+                                            visible
+                                            accordion="my-accordion3"
+                                            role="tabpanel"
+                                          >
+                                            <b-card-body
+                                              class="py-4 px-0 m-0 border"
+                                            >
+                                              <b-row class="px-3">
+                                                <b-col cols="12">
+                                                  <h5
+                                                    class="text-primary w-100"
+                                                  >
+                                                    # {{ evidence._id }}
+                                                  </h5>
+                                                  <h3 class="text-dark w-100">
+                                                    {{ evidence.title }}
+                                                  </h3>
+                                                  <p class="text-dark">
+                                                    {{ evidence.description }}
+                                                  </p>
+                                                  <img
+                                                    v-if="evidence.fileUrl"
+                                                    :src="
+                                                      getUrl(evidence.fileUrl)
+                                                    "
+                                                    height="280"
+                                                    width="280"
+                                                    :alt="evidence.fileUrl"
+                                                  />
+                                                  <h6
+                                                    class="text-dark"
+                                                  ></h6> </b-col></b-row></b-card-body></b-collapse></b-card
+                                      ></b-col>
+                                    </div>
+                                  </b-col>
+                                </b-row> </b-card-body></b-collapse></b-card
+                        ></b-col>
                       </div>
                     </b-col>
                   </b-row>
@@ -346,6 +423,12 @@
       :siteOrderItemID="siteOrderItemID"
       :productType="productType"
     />
+    <CreateNewEvidence
+      :isShow="isShowEvidence"
+      @onClose="onClose"
+      :key="newEvidenceKey"
+      :supplierOrderID="supplierOrderID"
+    />
   </div>
 </template>
 
@@ -360,11 +443,14 @@ import {
 import { GetALL } from "@/services/types.service";
 import { DeleteSupplierOrder } from "@/services/site.service";
 import CreateSupplierOrder from "./CreateSupplierOrder";
+import CreateNewEvidence from "./CreateNewEvidence";
+import { APP_URL } from "@/services/config";
 
 export default {
   name: "SiteOrderItemInfo",
   components: {
-    CreateSupplierOrder
+    CreateSupplierOrder,
+    CreateNewEvidence
   },
   data() {
     return {
@@ -374,6 +460,7 @@ export default {
       productTypes: [{ value: null, text: "Select a product type" }],
       siteOrderItems: [],
       orderSiteID: null,
+      supplierOrderID: null,
       siteOrderItemID: null,
       productType: null,
       siteOrderItemStatus: ["Pending", "Approved", "Declined", "Placed"],
@@ -387,7 +474,9 @@ export default {
         message: null
       },
       isShow: false,
-      supplierOrderKey: new Date().valueOf().toString() + 50005
+      supplierOrderKey: new Date().valueOf().toString() + 50005,
+      isShowEvidence: false,
+      newEvidenceKey: new Date().valueOf().toString() + 50089
     };
   },
   mounted() {
@@ -520,12 +609,22 @@ export default {
       this.productType = productType;
       this.isShow = true;
     },
+    createNewEvidence(id) {
+      this.supplierOrderID = id;
+      this.isShowEvidence = true;
+    },
     onClose() {
       this.isShow = false;
       this.siteOrderItemID = null;
       this.productType = null;
       this.supplierOrderKey = new Date().valueOf().toString() + 50005;
+      this.isShowEvidence = false;
+      this.supplierOrderID = null;
+      this.newEvidenceKey = new Date().valueOf().toString() + 500050;
       this.initFn();
+    },
+    getUrl(fileName) {
+      return `${APP_URL}/uploads/${fileName}`;
     }
   }
 };

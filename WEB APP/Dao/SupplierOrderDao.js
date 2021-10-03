@@ -1,5 +1,6 @@
 const Product = require("../Schemas/Product");
 const SupplierOrder = require("../Schemas/SupplierOrder/SupplierOrder");
+const SupplierOrderEvidence = require("../Schemas/SupplierOrder/SupplierOrderEvidences");
 
 exports.findAllBySiteOrderItem = async (siteOrderItemID) => {
   const supplierOrders = await SupplierOrder.find({ siteOrderItemID })
@@ -16,6 +17,17 @@ exports.create = async (data) => {
   return supplierOrder;
 };
 
+exports.createEvidence = async (id, data) => {
+  const supplierOrderEvidence = await SupplierOrderEvidence.create(data);
+  const supplierOrder = SupplierOrder.findByIdAndUpdate(
+    id,
+    { $push: { evidences: supplierOrderEvidence._id } },
+    { new: true, useFindAndModify: false }
+  );
+
+  return supplierOrder;
+};
+
 exports.update = async (_id, { status, statusDescription }) => {
   const supplierOrder = await SupplierOrder.updateOne(
     { _id },
@@ -28,7 +40,7 @@ exports.delete = async (_id) => {
   // get Supplier order
   const supplierOrder = await SupplierOrder.findOne({
     _id,
-  });
+  }).populate("evidences");
 
   // validate Supplier order
   if (supplierOrder.status != "Pending")
@@ -36,6 +48,8 @@ exports.delete = async (_id) => {
 
   // ------------ DELETE -----------
   var result = await SupplierOrder.deleteOne({ _id });
+
+  supplierOrder.evidences.map((ev) => ev.delete());
 
   return result;
 };
