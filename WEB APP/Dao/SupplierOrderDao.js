@@ -12,6 +12,33 @@ exports.findAllBySiteOrderItem = async (siteOrderItemID) => {
   return supplierOrders;
 };
 
+exports.findOneByID = async (_id) => {
+  const supplierOrder = await SupplierOrder.findOne({ _id })
+    .populate("user")
+    .populate({
+      path: "product",
+      populate: {
+        path: "supplier",
+      },
+    })
+    .populate({
+      path: "product",
+      populate: {
+        path: "productType",
+      },
+    })
+    .populate({
+      path: "siteOrderItemID",
+      populate: {
+        path: "siteOrderID",
+        populate: {
+          path: "site",
+        },
+      },
+    });
+  return supplierOrder;
+};
+
 exports.create = async (data) => {
   // validate order budget
   const QTY = data.quantity;

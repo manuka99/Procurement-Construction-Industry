@@ -26,6 +26,25 @@ exports.findAllBySiteOrder = async (siteOrderID) => {
   return newItems;
 };
 
+exports.findOneByID = async (_id) => {
+  const siteOrderItem = await SiteOrderItem.find({ _id }).populate(
+    "productType"
+  );
+  const supplierOrders = await SupplierOrder.find({
+    siteOrderItemID: siteOrderItem._id,
+  })
+    .populate("user")
+    .populate({
+      path: "product",
+      populate: {
+        path: "supplier",
+      },
+    })
+    .populate("evidences");
+
+  return { ...siteOrderItem._doc, supplierOrders };
+};
+
 exports.create = async (data) => {
   delete data.status;
   const siteOrderItem = await SiteOrderItem.create(data);

@@ -265,7 +265,9 @@
                                     </button>
                                     <button
                                       class="btn btn-primary btn-sm mb-2"
-                                      @click="downloadInvoice(supplierOrder)"
+                                      @click="
+                                        downloadInvoice(supplierOrder._id)
+                                      "
                                     >
                                       Download Invoice
                                     </button>
@@ -451,7 +453,6 @@ import { DeleteSupplierOrder } from "@/services/site.service";
 import CreateSupplierOrder from "./CreateSupplierOrder";
 import CreateNewEvidence from "./CreateNewEvidence";
 import { APP_URL } from "@/services/config";
-import easyinvoice from "easyinvoice";
 
 export default {
   name: "SiteOrderItemInfo",
@@ -634,54 +635,8 @@ export default {
     getUrl(fileName) {
       return `${APP_URL}/uploads/${fileName}`;
     },
-    downloadInvoice(so) {
-      console.log(so);
-      var data = {
-        currency: "LKR", //See documentation 'Locales and Currency' for more info
-        taxNotation: "vat", //or gst
-        marginTop: 25,
-        marginRight: 25,
-        marginLeft: 25,
-        marginBottom: 25,
-        logo: "https://public.easyinvoice.cloud/img/logo_en_original.png", //or base64
-        background: "https://public.easyinvoice.cloud/img/watermark-draft.jpg", //or base64 //img or pdf
-        sender: {
-          company: "Sample Corp",
-          address: "Sample Street 123",
-          zip: "1234 AB",
-          city: "Sampletown",
-          country: "Samplecountry"
-        },
-        client: {
-          company: "Client Corp",
-          address: "Clientstreet 456",
-          zip: "4567 CD",
-          city: "Clientcity",
-          country: "Clientcountry"
-        },
-        invoiceNumber: "2021.0001",
-        invoiceDate: "1.1.2021",
-        products: [
-          {
-            quantity: "2",
-            description: "Test1",
-            tax: 6,
-            price: 33.87
-          },
-          {
-            quantity: "4",
-            description: "Test2",
-            tax: 21,
-            price: 10.45
-          }
-        ],
-        bottomNotice: "Kindly pay your invoice within 15 days."
-      };
-
-      //Create your invoice! Easy!
-      easyinvoice.createInvoice(data, function(result) {
-        easyinvoice.download("Invoice.pdf", result.pdf);
-      });
+    downloadInvoice(id) {
+      window.open(`${APP_URL}/download/supplier-orders/${id}`);
     }
   }
 };

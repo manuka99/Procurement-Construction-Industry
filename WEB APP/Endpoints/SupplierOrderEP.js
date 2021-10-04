@@ -1,5 +1,6 @@
 const { sendSuccess } = require("../Common/util");
 const SupplierOrderDao = require("../Dao/SupplierOrderDao");
+const easyinvoice = require("easyinvoice");
 
 // find all
 exports.GetAllOrdersByItem = async (req, res, next) => {
@@ -8,6 +9,61 @@ exports.GetAllOrdersByItem = async (req, res, next) => {
       req.params.id
     ); //site Order item Id
     sendSuccess(res, { supplierOrders });
+  } catch (error) {
+    next(error);
+  }
+};
+
+exports.DownloadInvoice = async (req, res, next) => {
+  try {
+    const supplierOrder = await SupplierOrderDao.findOneByID(req.params.id); //site Order item Id
+    if (!supplierOrder)
+      throw new Error("No supplier orders to generate Invoice.");
+
+    const data = {
+      currency: "LKR", //See documentation 'Locales and Currency' for more info
+      taxNotation: "vat", //or gst
+      marginTop: 25,
+      marginRight: 25,
+      marginLeft: 25,
+      marginBottom: 25,
+      logo: supplierOrder.product.supplier.logo, //or base64
+      background: "https://public.easyinvoice.cloud/img/watermark-draft.jpg", //or base64 //img or pdf
+      sender: {
+        company: `${supplierOrder.product.supplier.firstName} ${supplierOrder.product.supplier.lastName}`,
+        address: supplierOrder.product.supplier.address,
+        zip: "1234 AB",
+        city: "Colombo",
+        country: "Sri Lanka",
+      },
+      client: {
+        company: `${supplierOrder.user.firstName} ${supplierOrder.user.lastName} (${supplierOrder.user.role})`,
+        address: supplierOrder.deliveryLocation,
+        zip: "4567 CD",
+        city: "Colombo",
+        country: "Sri Lanka",
+      },
+      invoiceNumber: supplierOrder._id,
+      invoiceDate: supplierOrder.createdAt.toString(),
+      products: [
+        {
+          quantity: "2",
+          description: `${supplierOrder.product.productType.name} (${supplierOrder.product.brand})`,
+          tax: 0,
+          price: supplierOrder.product.price,
+        },
+      ],
+      bottomNotice: `This order is currently on ${supplierOrder.status.toUpperCase()} stage.`,
+    };
+
+    const result = await easyinvoice.createInvoice(data);
+    var pdf = Buffer.from(result.pdf, "base64");
+
+    res.writeHead(200, {
+      "Content-Type": "application/pdf",
+      "Content-Length": pdf.length,
+    });
+    return res.end(pdf);
   } catch (error) {
     next(error);
   }

@@ -24,4 +24,5 @@ exports.AppMiddlewares = (app) => {
 
   // ADMIN CONTENT
   app.use("/api/admin/", RoleAuth([UserEnum.ADMIN]));
+  // app.use("/api/auth/download/", RoleAuth([UserEnum.ADMIN]));
 };
