@@ -102,6 +102,12 @@ const routes = [
           import(/* webpackChunkName: "demo" */ "../views/GoogleMaps.vue")
       },
       {
+        path: "/users",
+        name: "Users",
+        component: () =>
+          import(/* webpackChunkName: "demo" */ "../views/Users/Users.vue")
+      },
+      {
         path: "/tables",
         name: "Tables",
         component: () =>

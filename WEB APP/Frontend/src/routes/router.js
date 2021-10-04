@@ -58,7 +58,8 @@ router.beforeEach((to, from, next) => {
         "Sites",
         "Site",
         "Order",
-        "Orders"
+        "Orders",
+        "Users"
       ]);
       break;
     case "SUPPLIER":

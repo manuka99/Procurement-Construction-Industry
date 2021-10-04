@@ -14,8 +14,8 @@
 
         <sidebar-item
           :link="{
-            name: 'Icons',
-            path: '/icons',
+            name: 'Users',
+            path: '/users',
             icon: 'ni ni-planet text-blue'
           }"
         >
@@ -25,16 +25,7 @@
           :link="{
             name: 'Orders',
             path: '/orders',
-            icon: 'ni ni-planet text-blue'
-          }"
-        >
-        </sidebar-item>
-
-        <sidebar-item
-          :link="{
-            name: 'Maps',
-            path: '/maps',
-            icon: 'ni ni-pin-3 text-orange'
+            icon: 'ni ni-money-coins text-dark'
           }"
         >
         </sidebar-item>
@@ -44,15 +35,6 @@
             name: 'User Profile',
             path: '/profile',
             icon: 'ni ni-single-02 text-yellow'
-          }"
-        >
-        </sidebar-item>
-
-        <sidebar-item
-          :link="{
-            name: 'Tables',
-            path: '/tables',
-            icon: 'ni ni-bullet-list-67 text-red'
           }"
         >
         </sidebar-item>

@@ -12,6 +12,42 @@ exports.GetRequestUser = (req, res, next) => {
   return sendSuccess(res, { user: req.user });
 };
 
+exports.GetAllManagementUsers = async (req, res, next) => {
+  try {
+    const users = await UserDao.AllSiteManagementUsers();
+    return sendSuccess(res, { users });
+  } catch (error) {
+    next(error);
+  }
+};
+
+exports.CreateManagementUser = async (req, res, next) => {
+  try {
+    const user = await UserDao.create(req.body);
+    return sendSuccess(res, { user });
+  } catch (error) {
+    next(error);
+  }
+};
+
+exports.UpdateManagementUser = async (req, res, next) => {
+  try {
+    const user = await UserDao.update(req.params.id, req.body);
+    return sendSuccess(res, { user });
+  } catch (error) {
+    next(error);
+  }
+};
+
+exports.DeleteManagementUser = async (req, res, next) => {
+  try {
+    const user = await UserDao.delete(req.params.id);
+    return sendSuccess(res, { user });
+  } catch (error) {
+    next(error);
+  }
+};
+
 exports.GetAllSiteManagers = async (req, res, next) => {
   try {
     const users = await UserDao.AllSiteManagers();
