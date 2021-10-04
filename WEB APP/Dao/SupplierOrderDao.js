@@ -12,6 +12,34 @@ exports.findAllBySiteOrderItem = async (siteOrderItemID) => {
   return supplierOrders;
 };
 
+exports.findAll = async () => {
+  const supplierOrders = await SupplierOrder.find()
+    .populate("user")
+    .populate({
+      path: "product",
+      populate: {
+        path: "supplier",
+      },
+    })
+    .populate({
+      path: "product",
+      populate: {
+        path: "productType",
+      },
+    })
+    .populate({
+      path: "siteOrderItemID",
+      populate: {
+        path: "siteOrderID",
+        populate: {
+          path: "site",
+        },
+      },
+    })
+    .sort({ updatedAt: "descending" });
+  return supplierOrders;
+};
+
 exports.findOneByID = async (_id) => {
   const supplierOrder = await SupplierOrder.findOne({ _id })
     .populate("user")

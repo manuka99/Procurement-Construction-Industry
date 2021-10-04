@@ -14,6 +14,15 @@ exports.GetAllOrdersByItem = async (req, res, next) => {
   }
 };
 
+exports.GetAllSupplierOrders = async (req, res, next) => {
+  try {
+    var supplierOrders = await SupplierOrderDao.findAll();
+    sendSuccess(res, { supplierOrders });
+  } catch (error) {
+    next(error);
+  }
+};
+
 exports.DownloadInvoice = async (req, res, next) => {
   try {
     const supplierOrder = await SupplierOrderDao.findOneByID(req.params.id); //site Order item Id
@@ -32,9 +41,9 @@ exports.DownloadInvoice = async (req, res, next) => {
       sender: {
         company: `${supplierOrder.product.supplier.firstName} ${supplierOrder.product.supplier.lastName}`,
         address: supplierOrder.product.supplier.address,
-        zip: "1234 AB",
-        city: "Colombo",
-        country: "Sri Lanka",
+        zip: "Sri Lanka",
+        city: `${supplierOrder.product.supplier.email}`,
+        country: `${supplierOrder.product.supplier.phone}`,
       },
       client: {
         company: `${supplierOrder.user.firstName} ${supplierOrder.user.lastName} (${supplierOrder.user.role})`,
@@ -42,6 +51,7 @@ exports.DownloadInvoice = async (req, res, next) => {
         zip: "4567 CD",
         city: "Colombo",
         country: "Sri Lanka",
+        custom1: `Contact: ${supplierOrder.user.phone}`,
       },
       invoiceNumber: supplierOrder._id,
       invoiceDate: supplierOrder.createdAt.toString(),

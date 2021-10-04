@@ -94,6 +94,10 @@ export const GetAllSupplierOrdersBySiteOrderItem = id => {
   return Api().get(`/auth/site-order-item-supplier-orders/:id${id}`);
 };
 
+export const GetAllSupplierOrders = () => {
+  return Api().get(`/auth/supplier-orders`);
+};
+
 export const CreateSupplierOrder = data => {
   return Api().post(`/auth/supplier-orders`, data);
 };

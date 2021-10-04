@@ -23,6 +23,15 @@
 
         <sidebar-item
           :link="{
+            name: 'Orders',
+            path: '/orders',
+            icon: 'ni ni-planet text-blue'
+          }"
+        >
+        </sidebar-item>
+
+        <sidebar-item
+          :link="{
             name: 'Maps',
             path: '/maps',
             icon: 'ni ni-pin-3 text-orange'
