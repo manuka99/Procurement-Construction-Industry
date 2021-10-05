@@ -30,7 +30,7 @@
           <div
             v-for="item in siteInfo.phases"
             :key="item._id"
-            class="w-100 bg-white shadow px-3 py-1 bg-white rounded"
+            class="w-100 bg-white shadow px-3 py-1 bg-white rounded mb-3"
           >
             <div class="d-flex align-items-center">
               <b-icon

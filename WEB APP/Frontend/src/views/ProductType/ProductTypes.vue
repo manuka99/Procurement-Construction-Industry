@@ -77,7 +77,7 @@
             :items="items"
             :fields="fields"
             sort-icon-left
-            responsive="lg"
+            responsive
             hover
             dark
             class="custom-table"
@@ -176,9 +176,9 @@ export default {
     return {
       fields: [
         { key: "image", label: "Product Type" },
-        { key: "createdAt", label: "Created Date" },
+        { key: "createdAt", label: "Created Date", sortable: true },
         { key: "metric", label: "Measured Metrics" },
-        { key: "description", label: "Description" },
+        // { key: "description", label: "Description" },
         { key: "suppliers", label: "Suppliers" },
         { key: "delete", label: "Delete" }
       ],

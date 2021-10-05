@@ -11,7 +11,7 @@ const SupplierSchema = new Schema({
     type: String,
     required: [true, "description must not be empty."],
     minlength: [8, "description must have at least 8 characters."],
-    maxlength: [650, "description must not have more than 650 characters."],
+    maxlength: [1000, "description must not have more than 650 characters."],
   },
   paymentInfo: String,
   payments: [{ type: Types.ObjectId, ref: "payment" }],
