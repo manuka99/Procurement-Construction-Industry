@@ -14,11 +14,9 @@ const startApp = async () => {
 
     // serve static assests
     if (process.env.NODE_ENV === "production") {
-      app.use(express.static("Frontend/build"));
+      app.use(express.static("public"));
       app.get("*", (req, res) => {
-        res.sendFile(
-          path.resolve(__dirname, `Frontend`, `build`, `index.html`)
-        );
+        res.sendFile(path.resolve(__dirname, `public`, `index.html`));
       });
     }
 
