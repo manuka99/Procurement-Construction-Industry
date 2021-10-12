@@ -57,7 +57,7 @@ exports.DownloadInvoice = async (req, res, next) => {
       invoiceDate: supplierOrder.createdAt.toString(),
       products: [
         {
-          quantity: "2",
+          quantity: supplierOrder.quantity,
           description: `${supplierOrder.product.productType.name} (${supplierOrder.product.brand})`,
           tax: 0,
           price: supplierOrder.product.price,

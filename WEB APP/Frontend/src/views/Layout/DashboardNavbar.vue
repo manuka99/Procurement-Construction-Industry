@@ -59,7 +59,7 @@
               <img
                 alt="Image placeholder"
                 class="avatar avatar-sm rounded-circle"
-                :src="getImg ? getImg : 'img/theme/user.jpg'"
+                :src="getImg ? getImg : '/img/theme/user.jpg'"
               />
             </span>
             <b-media-body class="ml-2 d-none d-lg-block">
